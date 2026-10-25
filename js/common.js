@@ -5,7 +5,7 @@ async function loadConfig() {
     const res = await fetch("config.json");
     if (!res.ok) throw new Error("HTTP " + res.status);
     const cfg = await res.json();
-    window.__CONFIG__ = cfg; // 成功时也存入全局
+    window.__CONFIG__ = cfg;
     return cfg;
   } catch (e) {
     console.warn("读取 config.json 失败，使用内联兜底数据。");
@@ -13,22 +13,62 @@ async function loadConfig() {
   }
 }
 
-function applyTheme(theme) {
-  if (!theme) return;
-  const root = document.documentElement;
-  if (theme.primary) {
-    root.style.setProperty("--bulma-primary-h", theme.primary.h);
-    root.style.setProperty("--bulma-primary-s", theme.primary.s + "%");
-    root.style.setProperty("--bulma-primary-l", theme.primary.l + "%");
-  }
-  if (theme.link) {
-    root.style.setProperty("--bulma-link-h", theme.link.h);
-    root.style.setProperty("--bulma-link-s", theme.link.s + "%");
-    root.style.setProperty("--bulma-link-l", theme.link.l + "%");
-  }
-}
+// ================= 核心主题控制逻辑 =================
+// 挂载到 window 以便 theme.js 调用
+window.__applyTheme = function(customConfig) {
+  const html = document.documentElement;
+  const KEY_MODE = "theme";
+  const KEY_PALETTE = "palette";
 
-function initTheme() { /* 已由 js/theme.js 接管，无需操作 */ }
+  // 1. 确定当前模式 (读取本地存储，如果没有则看系统偏好)
+  const savedMode = localStorage.getItem(KEY_MODE);
+  const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const mode = savedMode || (prefersDark ? "dark" : "light");
+
+  if (mode === "dark") html.setAttribute("data-theme", "dark");
+  else html.removeAttribute("data-theme");
+
+  // 同步代码高亮
+  const hljs = document.getElementById("hljs-theme");
+  if (hljs) hljs.href = mode === "dark" ? "libs/github-dark.min.css" : "libs/github.min.css";
+
+  // 2. 确定当前配色
+  const palette = localStorage.getItem(KEY_PALETTE) || "default";
+  if (palette === "default") html.removeAttribute("data-palette");
+  else html.setAttribute("data-palette", palette);
+
+  // 3. 重置行内 CSS 变量
+  ["primary-h","primary-s","primary-l","link-h","link-s","link-l"].forEach(k =>
+    html.style.removeProperty("--bulma-" + k)
+  );
+
+  // 4. 应用具体的颜色值
+  if (palette === "mono") {
+    // 极简模式：手动写死灰阶
+    html.style.setProperty("--bulma-primary-h", "220");
+    html.style.setProperty("--bulma-primary-s", "10%");
+    html.style.setProperty("--bulma-primary-l", "45%");
+    html.style.setProperty("--bulma-link-h", "220");
+    html.style.setProperty("--bulma-link-s", "10%");
+    html.style.setProperty("--bulma-link-l", "45%");
+  } else {
+    // 其他模式：以 config 为基准 (config 会被 custom-themes.css 中的 [data-palette] 覆盖)
+    const cfg = customConfig || window.__CONFIG__;
+    if (cfg && cfg.theme) {
+      const t = cfg.theme;
+      if (t.primary) {
+        html.style.setProperty("--bulma-primary-h", t.primary.h);
+        html.style.setProperty("--bulma-primary-s", t.primary.s + "%");
+        html.style.setProperty("--bulma-primary-l", t.primary.l + "%");
+      }
+      if (t.link) {
+        html.style.setProperty("--bulma-link-h", t.link.h);
+        html.style.setProperty("--bulma-link-s", t.link.s + "%");
+        html.style.setProperty("--bulma-link-l", t.link.l + "%");
+      }
+    }
+  }
+};
 
 // ================= 全文搜索模态框 =================
 function initSearchModal() {
@@ -215,11 +255,14 @@ function initBackToTop() {
 
 async function initLayout(page) {
   const config = await loadConfig();
-  applyTheme(config.theme);
+  
+  // 应用主题（使用最新的全局函数）
+  window.__applyTheme(config.theme);
+
   renderNavbar(config, page);
   renderFooter(config);
   initSearchModal();
-  // 渲染 404 文案（只有 404.html 有这些元素）
+  
   const pc404 = (config.pageCopy || {}).page404 || {};
   const ec = document.getElementById("error-code");
   const et = document.getElementById("error-title");
@@ -234,5 +277,3 @@ async function initLayout(page) {
 }
 
 window.initLayout = initLayout;
-
-
