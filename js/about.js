@@ -4,10 +4,12 @@ async function initAbout() {
   const config = await initLayout("about.html");
   const el = document.getElementById("about-content");
   const a = config.author || {};
+  const pageTitleEl = document.getElementById("about-page-title");
+  if (pageTitleEl) pageTitleEl.textContent = ((config.pageCopy || {}).aboutPage || {}).title || "关于我";
 
   // 计算工作年限
   const currentYear = new Date().getFullYear();
-  const startYear = 2021; 
+  const startYear = a.startYear || 2021; 
   const experience = currentYear - startYear;
 
   el.innerHTML = `
@@ -22,7 +24,7 @@ async function initAbout() {
           <p class="subtitle is-6 has-text-primary mb-3">${a.bio || "前端开发者"}</p>
           
           <div class="tags is-centered mb-4">
-            <span class="tag is-light">全栈开发</span>
+            ${(a.skills || []).map(s => `<span class="tag is-light">${s}</span>`).join("")}
             <span class="tag is-light">${experience} 年经验</span>
           </div>
 
@@ -38,17 +40,12 @@ async function initAbout() {
       <!-- 右侧：详细介绍 -->
       <div class="column is-8">
         <div class="content is-medium about-content-text">
-          <h3 class="title is-3 mb-4">你好，我是 ${a.name || "佚名"} 👋</h3>
-          <p>
-            欢迎来到我的数字花园。我是一名热爱技术、喜欢折腾的开发者。在这里，我会记录我在编程路上的所学、所思、所想。
-          </p>
-          <p>
-            如果你对我的文章感兴趣，或者有项目想要合作，欢迎随时通过邮件与我联系。
-          </p>
+          <h3 class="title is-3 mb-4">${((a.about || {}).greeting || "你好，我是 {name} 👋").replace("{name}", a.name || "佚名")}</h3>
+          ${((a.about || {}).paragraphs || []).map(p => `<p>${p}</p>`).join("")}
           
           <hr style="border-top: 1px dashed var(--bulma-border-weak); margin: 2rem 0;">
 
-          <h4 class="title is-5 mb-3">联系我</h4>
+          <h4 class="title is-5 mb-3">${((a.about || {}).contactTitle) || "联系我"}</h4>
           <div class="tags are-medium">
             <a href="mailto:${a.email}" class="tag is-link is-light">
               <span class="icon is-small mr-1"><i class="fas fa-envelope"></i></span> ${a.email}
