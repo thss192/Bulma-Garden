@@ -31,58 +31,32 @@
 ```text
 
 my-blog/
-
 ├── index.html                 # 首页（文章列表、侧边栏）
-
 ├── post.html                  # 文章详情页
-
 ├── about.html                 # 关于页
-
 ├── projects.html              # 项目页
-
 ├── links.html                 # 友链页
-
 ├── 404.html                   # 404 错误页
-
 ├── config.json                # 站点全局配置（标题、作者、导航、默认排序等）
-
 ├── projects.json              # 项目数据
-
 ├── links.json                 # 友链数据
-
 ├── custom.css                 # 唯一自定义 CSS（主题色、深色模式微调）
-
 ├── js/
-
 │   ├── fallback-data.js       # 本地双击预览时的兜底数据
-
 │   ├── common.js              # 公共逻辑（导航、主题、搜索、回顶部）
-
 │   ├── home.js                # 首页逻辑
-
 │   ├── post.js                # 详情页逻辑
-
 │   ├── about.js               # 关于页逻辑
-
 │   ├── projects.js            # 项目页逻辑
-
 │   └── links.js               # 友链页逻辑
-
 ├── posts/
-
 │   ├── index.json             # 文章索引清单（脚本自动生成）
-
 │   ├── search-index.json      # 全文搜索索引（脚本自动生成）
-
 │   ├── bulma-01.md            # 示例文章 1
-
 │   └── ...                    # 更多 Markdown 文章
-
 └── scripts/
-
-\\\\\\\&#x20;   ├── generate-index.js      # 扫描 md 生成文章清单与搜索索引
-
-\\\\\\\&#x20;   └── generate-rss.js        # 生成 RSS 订阅文件
+    ├── generate-index.js      # 扫描 md 生成文章清单与搜索索引
+    └── generate-rss.js        # 生成 RSS 订阅文件
 
 ```
 
@@ -141,7 +115,7 @@ date: 2025-11-01
 
 order: 8 # 可选：用于自定义排序
 
-tags: \\\\\\\[前端, CSS, 布局]
+tags: [前端, CSS, 布局]
 
 series: CSS 进阶之路 # 可选：系列名称
 
@@ -204,9 +178,9 @@ node scripts/generate-index.js
 2. 打开仓库的 **Settings** -> **Pages**。
 3. 在 **Build and deployment** 下：
 
-&#x20;  - Source 选择 `Deploy from a branch`。
+  - Source 选择 `Deploy from a branch`。
 
-&#x20;  - Branch 选择 `main`，目录选择 `/ (root)`。
+  - Branch 选择 `main`，目录选择 `/ (root)`。
 
 4. 点击 Save，等待一两分钟，你的博客就会发布在 `https://你的用户名.github.io/仓库名/`。
 
