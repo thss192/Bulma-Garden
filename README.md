@@ -1,5 +1,9 @@
 # 🌱 Bulma-Garden
 
+!\[Bulma](https://img.shields.io/badge/Bulma-1.0.2-00d1b2?style=flat-square\&logo=bulma)
+!\[Vanilla JS](https://img.shields.io/badge/Vanilla\_JS-ES6+-f7df1e?style=flat-square\&logo=javascript)
+!\[License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)
+!\[PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)
 
 这是一个基于 **Bulma CSS** 和 **原生 JavaScript** 构建的纯静态个人博客系统。无需任何构建工具（Webpack/Vite/Nuxt），不需要数据库，双击即可运行，完美适配 GitHub Pages 等静态托管服务。
 
@@ -9,21 +13,14 @@
 
 
 
-- **极简架构**：HTML + CSS + 原生 JS，零依赖，拒绝臃肿。
-
-- **内容与视图分离**：文章数据统一交由 JSON 管理，前端负责渲染。
-
-- **系列教程管理**：支持按 `series` 分组，内置手风琴折叠与系列独立分页。
-
-- **灵活排序**：支持基于时间（正序/倒序）或自定义 ID（`order`）排序。
-
-- **深色模式**：完美适配系统偏好，支持手动一键切换并记忆至 `localStorage`。
-
-- **全文搜索**：基于 JSON 索引的本地全文搜索，支持 `Ctrl+K` 快速唤起。
-
-- **沉浸式阅读**：自动生成目录（TOC）、阅读进度条、阅读时长估算、图片点击放大（Lightbox）、代码一键复制。
-
-- **无缝部署**：支持直接双击 `index.html` 预览（自带兜底数据），也支持本地服务器运行。
+* **极简架构**：HTML + CSS + 原生 JS，零依赖，拒绝臃肿。
+* **内容与视图分离**：文章数据统一交由 JSON 管理，前端负责渲染。
+* **系列教程管理**：支持按 `series` 分组，内置手风琴折叠与系列独立分页。
+* **灵活排序**：支持基于时间（正序/倒序）或自定义 ID（`order`）排序。
+* **深色模式**：完美适配系统偏好，支持手动一键切换并记忆至 `localStorage`。
+* **全文搜索**：基于 JSON 索引的本地全文搜索，支持 `Ctrl+K` 快速唤起。
+* **沉浸式阅读**：自动生成目录（TOC）、阅读进度条、阅读时长估算、图片点击放大（Lightbox）、代码一键复制。
+* **无缝部署**：支持直接双击 `index.html` 预览（自带兜底数据），也支持本地服务器运行。
 
 
 
@@ -83,9 +80,9 @@ my-blog/
 
 └── scripts/
 
-&#x20;   ├── generate-index.js      # 扫描 md 生成文章清单与搜索索引
+\\\&#x20;   ├── generate-index.js      # 扫描 md 生成文章清单与搜索索引
 
-&#x20;   └── generate-rss.js        # 生成 RSS 订阅文件
+\\\&#x20;   └── generate-rss.js        # 生成 RSS 订阅文件
 
 ```
 
@@ -132,7 +129,6 @@ npx serve .
 ### 新增一篇文章
 
 1. 在 `posts/` 目录下新建 Markdown 文件，文件名即 URL 的 slug（如 `css-flexbox.md`）。
-
 2. 文件头部必须包含规范的 Front-matter：
 
 ```markdown
@@ -145,7 +141,7 @@ date: 2025-11-01
 
 order: 8 # 可选：用于自定义排序
 
-tags: [前端, CSS, 布局]
+tags: \\\[前端, CSS, 布局]
 
 series: CSS 进阶之路 # 可选：系列名称
 
@@ -177,33 +173,26 @@ node scripts/generate-index.js
 
 打开 `config.json`，你可以修改：
 
-- `siteTitle`：站点标题
-
-- `author`：作者信息（姓名、头像、简介、邮箱）
-
-- `nav`：顶部导航菜单
-
-- `social`：社交链接（GitHub、Twitter 等）
-
-- `defaultSort`：全局默认排序方式（`"asc"` 时间正序 / `"desc"` 时间倒序 / `"order"` 自定义 ID）
-
-- `theme`：主题色 HSL 值
+* `siteTitle`：站点标题
+* `author`：作者信息（姓名、头像、简介、邮箱）
+* `nav`：顶部导航菜单
+* `social`：社交链接（GitHub、Twitter 等）
+* `defaultSort`：全局默认排序方式（`"asc"` 时间正序 / `"desc"` 时间倒序 / `"order"` 自定义 ID）
+* `theme`：主题色 HSL 值
 
 
 
 ### 修改主题色 / 样式
 
-- **改颜色**：修改 `config.json` 中的 `theme` 字段，或者直接修改 `custom.css` 的 `:root` 变量。
-
-- **改排版**：打开 `custom.css`，代码按功能模块做了非常清晰的注释划分，直接修改对应区域的 CSS 即可。
+* **改颜色**：修改 `config.json` 中的 `theme` 字段，或者直接修改 `custom.css` 的 `:root` 变量。
+* **改排版**：打开 `custom.css`，代码按功能模块做了非常清晰的注释划分，直接修改对应区域的 CSS 即可。
 
 
 
 ### 新增项目 / 友链
 
-- 项目：编辑 `projects.json`，在数组中添加对象即可。
-
-- 友链：编辑 `links.json`，在数组中添加对象即可。
+* 项目：编辑 `projects.json`，在数组中添加对象即可。
+* 友链：编辑 `links.json`，在数组中添加对象即可。
 
 
 
@@ -212,9 +201,7 @@ node scripts/generate-index.js
 
 
 1. 在 GitHub 上创建一个新仓库，并将本项目代码推送到 `main` 分支。
-
 2. 打开仓库的 **Settings** -> **Pages**。
-
 3. 在 **Build and deployment** 下：
 
 &#x20;  - Source 选择 `Deploy from a branch`。
