@@ -1,0 +1,14 @@
+﻿[
+  { 
+    "name": "My Blog", 
+    "description": "基于 Bulma 的纯静态博客，支持深色模式、全文搜索、目录定位等功能。", 
+    "url": "https://github.com/", 
+    "tags": ["HTML", "Bulma", "JS"] 
+  },
+  { 
+    "name": "Todo App", 
+    "description": "一个基于原生 JavaScript 和 LocalStorage 实现的轻量级待办事项应用。", 
+    "url": "https://github.com/", 
+    "tags": ["JS", "CSS"] 
+  }
+]

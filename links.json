@@ -1,0 +1,4 @@
+﻿[
+  { "name": "Bulma", "url": "https://bulma.io", "description": "现代 CSS 框架。" },
+  { "name": "MDN", "url": "https://developer.mozilla.org", "description": "Web 文档。" }
+]

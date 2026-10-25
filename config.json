@@ -1,0 +1,53 @@
+﻿{
+    "siteTitle":  "我的个人博客",
+    "siteSubtitle":  "记录代码与生活",
+    "author":  {
+                   "name":  "张三",
+                   "bio":  "前端开发者，喜欢 CSS 和咖啡。",
+                   "avatar":  "images/avatar.png",
+                   "email":  "zhangsan@example.com"
+               },
+    "nav":  [
+                {
+                    "label":  "首页",
+                    "href":  "index.html"
+                },
+                {
+                    "label":  "项目",
+                    "href":  "projects.html"
+                },
+                {
+                    "label":  "友链",
+                    "href":  "links.html"
+                },
+                {
+                    "label":  "关于",
+                    "href":  "about.html"
+                }
+            ],
+    "social":  [
+                   {
+                       "label":  "GitHub",
+                       "href":  "https://github.com/",
+                       "icon":  "fab fa-github"
+                   },
+                   {
+                       "label":  "Twitter",
+                       "href":  "https://twitter.com/",
+                       "icon":  "fab fa-twitter"
+                   }
+               ],
+    "theme":  {
+                  "primary":  {
+                                  "h":  171,
+                                  "s":  100,
+                                  "l":  41
+                              },
+                  "link":  {
+                               "h":  233,
+                               "s":  100,
+                               "l":  63
+                           }
+              },
+    "defaultSort":  "asc"
+}

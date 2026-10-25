@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>连接 · 我的博客</title>
+  <link rel="stylesheet" href="libs/bulma.min.css" />
+  <link rel="stylesheet" href="libs/fontawesome/css/all.min.css" />
+  <link rel="stylesheet" href="custom.css" />
+</head>
+<body>
+  <div id="site-navbar"></div>
+
+  <section class="hero is-light" style="margin-top: 3.25rem;">
+    <div class="hero-body py-6">
+      <div class="container has-text-centered">
+        <h1 class="title is-2 mb-3">连接</h1>
+        <p class="subtitle is-5 has-text-grey">互联网是一座座孤岛，友链让我们连成大陆。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section pt-6">
+    <div class="container">
+      <div class="columns is-variable is-8">
+        <!-- 左侧：友链列表 -->
+        <div class="column is-8">
+          <h2 class="title is-4 mb-4"><i class="fas fa-link has-text-primary mr-2"></i>我的邻居们</h2>
+          <div id="link-list" class="columns is-multiline"></div>
+        </div>
+
+        <!-- 右侧：我的社交阵地 -->
+        <div class="column is-4">
+          <div class="box mb-5" style="border-radius: var(--bulma-radius-large);">
+            <h3 class="title is-5 mb-4"><i class="fas fa-satellite-dish has-text-primary mr-2"></i>我的阵地</h3>
+            <div id="social-list" class="menu-list"></div>
+          </div>
+          
+          <div class="notification is-info is-light" style="border-radius: var(--bulma-radius-large);">
+            <p class="is-size-7"><strong>交换友链？</strong><br>如果你也有自己的博客，欢迎发邮件与我交换友链！</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="site-footer"></div>
+
+  <script src="js/fallback-data.js"></script>
+  <script src="js/common.js" defer></script>
+  <script src="js/links.js" defer></script>
+</body>
+</html>

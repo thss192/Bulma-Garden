@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>项目 · 我的博客</title>
+  <link rel="stylesheet" href="libs/bulma.min.css" />
+  <link rel="stylesheet" href="libs/fontawesome/css/all.min.css" />
+  <link rel="stylesheet" href="custom.css" />
+</head>
+<body>
+  <div id="site-navbar"></div>
+
+  <!-- 顶部引导区 -->
+  <section class="hero is-light" style="margin-top: 3.25rem;">
+    <div class="hero-body py-6">
+      <div class="container has-text-centered">
+        <h1 class="title is-2 mb-3">开源项目</h1>
+        <p class="subtitle is-5 has-text-grey">这里记录了我做过的一些开源项目与实战作品。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section pt-6">
+    <div class="container">
+      <!-- 项目列表挂载点 -->
+      <div id="project-list" class="columns is-multiline"></div>
+    </div>
+  </section>
+
+  <div id="site-footer"></div>
+  
+  <script src="js/fallback-data.js"></script>
+  <script src="js/common.js" defer></script>
+  <script src="js/projects.js" defer></script>
+</body>
+</html>

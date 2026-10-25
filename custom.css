@@ -1,0 +1,495 @@
+﻿/* ==========================================================================
+   My Blog - Custom Stylesheet
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. 全局变量与基础 (Variables & Base)
+   -------------------------------------------------------------------------- */
+:root {
+  /* 覆盖 Bulma 主色与链接色 */
+  --bulma-primary-h: 171;
+  --bulma-primary-s: 100%;
+  --bulma-primary-l: 41%;
+  --bulma-link-h: 233;
+  --bulma-link-s: 100%;
+  --bulma-link-l: 63%;
+  
+  /* 自定义全局变量 */
+  --bg-body: var(--bulma-scheme-main-bis);
+  --bg-dark: #121212;
+  --bg-dark-card: #1a1a1a;
+  --bg-dark-card-hover: #222;
+  --text-dark-muted: #888;
+  --border-dark: #2a2a2a;
+}
+
+body {
+  background-color: var(--bg-body);
+}
+
+[data-theme="dark"] body {
+  background-color: var(--bg-dark);
+}
+
+/* --------------------------------------------------------------------------
+   2. 导航栏 (Navbar)
+   -------------------------------------------------------------------------- */
+.navbar.is-fixed-top {
+  backdrop-filter: blur(12px);
+  background-color: rgba(255, 255, 255, 0.75) !important;
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.03);
+}
+
+[data-theme="dark"] .navbar.is-fixed-top {
+  background-color: rgba(18, 18, 18, 0.75) !important;
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.3);
+}
+
+.navbar-item.is-active {
+  background-color: var(--bulma-primary) !important;
+  color: var(--bulma-primary-invert) !important;
+  border-radius: var(--bulma-radius);
+  font-weight: 600;
+  margin: 0.5rem 0.25rem;
+  padding: 0.5rem 1rem;
+  box-shadow: 0 4px 12px rgba(0, 200, 150, 0.2);
+}
+
+[data-theme="dark"] .navbar-item.is-active {
+  background-color: rgba(0, 200, 150, 0.15) !important;
+  color: var(--bulma-primary) !important;
+  box-shadow: none;
+}
+
+/* --------------------------------------------------------------------------
+   3. 首页组件 (Home)
+   -------------------------------------------------------------------------- */
+/* 3.1 标签过滤 (Tag Filter) */
+#tag-filter .tag.is-clickable {
+  transition: all 0.2s ease;
+  border: 1px solid var(--bulma-border);
+  background-color: var(--bulma-scheme-main);
+  color: var(--bulma-text-strong);
+  font-weight: 500;
+}
+
+[data-theme="dark"] #tag-filter .tag.is-clickable {
+  background-color: var(--bg-dark-card);
+  border-color: #333;
+  color: #aaa;
+}
+
+#tag-filter .tag.is-clickable:hover {
+  transform: translateY(-1px);
+  color: var(--bulma-primary);
+  border-color: var(--bulma-primary);
+}
+
+#tag-filter .tag.is-primary {
+  background-color: var(--bulma-primary) !important;
+  color: var(--bulma-primary-invert) !important;
+  border-color: var(--bulma-primary);
+}
+
+/* 3.2 手风琴 (Accordion) */
+.series-accordion {
+  background-color: var(--bulma-scheme-main);
+  border: 1px solid var(--bulma-border-weak);
+  border-radius: var(--bulma-radius-large);
+  margin-bottom: 2rem;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+[data-theme="dark"] .series-accordion {
+  background-color: var(--bg-dark-card);
+  border-color: var(--border-dark);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.series-accordion:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+  border-color: var(--bulma-primary-soft);
+}
+
+[data-theme="dark"] .series-accordion:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+  border-color: rgba(0, 200, 150, 0.3);
+}
+
+.series-header {
+  display: flex;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  cursor: pointer;
+  background: linear-gradient(to right, var(--bulma-scheme-main-bis), var(--bulma-scheme-main));
+  border-left: 4px solid var(--bulma-primary);
+  transition: background 0.2s ease;
+}
+
+[data-theme="dark"] .series-header {
+  background: linear-gradient(to right, var(--bg-dark-card-hover), var(--bg-dark-card));
+}
+
+.series-header:hover {
+  background: var(--bulma-scheme-main-ter);
+}
+
+[data-theme="dark"] .series-header:hover {
+  background: #252525;
+}
+
+.series-title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--bulma-text-strong);
+  letter-spacing: -0.5px;
+}
+
+.series-count {
+  font-size: 0.8rem;
+  background-color: var(--bulma-scheme-main-ter);
+  color: var(--bulma-text);
+  padding: 0.15rem 0.6rem;
+  border-radius: var(--bulma-radius-rounded);
+  font-weight: 600;
+  border: 1px solid var(--bulma-border-weak);
+}
+
+[data-theme="dark"] .series-count {
+  background-color: #333;
+  color: #ccc;
+  border-color: transparent;
+}
+
+.series-icon-toggle {
+  margin-left: auto;
+  transition: transform 0.3s ease;
+  color: var(--bulma-text);
+}
+
+.series-content {
+  padding: 1.5rem;
+  border-top: 1px solid var(--bulma-border-weak);
+  background-color: var(--bulma-scheme-main);
+}
+
+[data-theme="dark"] .series-content {
+  background-color: var(--bg-dark-card);
+  border-top-color: var(--border-dark);
+}
+
+/* 3.3 文章卡片 (Cards) */
+.card {
+  background: linear-gradient(135deg, var(--bulma-scheme-main), var(--bulma-scheme-main-bis));
+  border: 1px solid var(--bulma-border-weak);
+  border-radius: var(--bulma-radius-large);
+  transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+[data-theme="dark"] .card {
+  background: linear-gradient(135deg, var(--bg-dark-card-hover), var(--bg-dark-card));
+  border-color: var(--border-dark);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+  border-color: var(--bulma-primary-soft);
+}
+
+[data-theme="dark"] .card:hover {
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+  border-color: var(--bulma-primary);
+}
+
+.card-content { flex-grow: 1; }
+.card .title.is-5 a { color: var(--bulma-text-strong); transition: color 0.2s; }
+.card .title.is-5 a:hover { color: var(--bulma-primary); }
+.card .content { color: var(--bulma-text); font-size: 0.95rem; }
+.card-footer { border-top: 1px solid var(--bulma-border-weak); background-color: transparent; }
+[data-theme="dark"] .card-footer { border-top-color: var(--border-dark); }
+.card-footer-item { font-size: 0.9rem; font-weight: 600; transition: background 0.2s; }
+.card-footer-item:hover { background-color: var(--bulma-scheme-main-bis); color: var(--bulma-primary); }
+[data-theme="dark"] .card-footer-item:hover { background-color: var(--border-dark); }
+
+.card .tag.is-info {
+  background-color: var(--bulma-info-soft) !important;
+  color: var(--bulma-info-bold) !important;
+  border-radius: var(--bulma-radius-rounded);
+  font-weight: 500;
+}
+
+/* --------------------------------------------------------------------------
+   4. 详情页组件 (Post)
+   -------------------------------------------------------------------------- */
+/* 4.1 目录 (TOC) */
+.toc-sticky {
+  position: sticky;
+  top: 5rem;
+  max-height: calc(100vh - 6rem);
+  overflow-y: auto;
+}
+
+#toc-list { border-left: 2px solid var(--bulma-border-weak); }
+[data-theme="dark"] #toc-list { border-left-color: #333; }
+
+#toc-list a {
+  display: block;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.85rem;
+  color: var(--bulma-text-light);
+  border-left: 2px solid transparent;
+  margin-left: -2px;
+  transition: all 0.15s ease;
+}
+
+#toc-list a:hover { color: var(--bulma-text-strong); }
+#toc-list a.is-active {
+  color: var(--bulma-primary);
+  border-left-color: var(--bulma-primary);
+  font-weight: 600;
+  background-color: var(--bulma-primary-soft);
+}
+
+#toc-list .toc-h2 { padding-left: 1rem; }
+#toc-list .toc-h3 { padding-left: 2rem; font-size: 0.8rem; }
+
+/* 4.2 正文排版 (Content) */
+/* 隐藏正文里与头部重复的一级标题 */
+#post-body > h1:first-child { display: none !important; }
+
+/* 行内代码 */
+:not(pre) > code {
+  background-color: rgba(175, 184, 193, 0.2) !important;
+  color: #eb5757 !important;
+  padding: 0.2em 0.4em !important;
+  border-radius: 4px;
+  font-size: 0.85em;
+}
+
+[data-theme="dark"] :not(pre) > code {
+  background-color: rgba(110, 118, 129, 0.4) !important;
+  color: #ff7b72 !important;
+}
+
+/* 终极代码块容器 */
+.code-wrapper {
+  background-color: var(--bulma-scheme-main-bis);
+  border: 1px solid var(--bulma-border-weak);
+  border-radius: var(--bulma-radius-large);
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+
+[data-theme="dark"] .code-wrapper {
+  background-color: #161616;
+  border-color: var(--border-dark);
+}
+
+/* 代码块头部栏 */
+.code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.4rem 1rem;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-bottom: 1px solid var(--bulma-border-weak);
+}
+
+[data-theme="dark"] .code-header {
+  background-color: var(--bg-dark-card);
+  border-bottom-color: var(--border-dark);
+}
+
+/* 语言标识 */
+.code-lang {
+  font-size: 0.75rem;
+  font-family: var(--bulma-family-code);
+  color: var(--bulma-text-light);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* 复制按钮 */
+.copy-btn {
+  color: var(--bulma-text-light) !important;
+  transition: all 0.2s ease !important;
+}
+
+.copy-btn:hover {
+  color: var(--bulma-primary) !important;
+  background-color: transparent !important;
+}
+
+[data-theme="dark"] .copy-btn {
+  color: var(--text-dark-muted) !important;
+}
+
+[data-theme="dark"] .copy-btn:hover {
+  color: var(--bulma-primary) !important;
+}
+
+/* 重写 pre 标签，去除内部多余样式 */
+.code-wrapper pre {
+  margin: 0 !important;
+  padding: 1rem 1.2rem !important;
+  background-color: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+.code-wrapper pre code {
+  background-color: transparent !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  font-size: 0.9em !important;
+  line-height: 1.6 !important;
+}
+
+/* 滚动条美化 */
+.code-wrapper pre::-webkit-scrollbar { height: 8px; width: 8px; }
+.code-wrapper pre::-webkit-scrollbar-track { background: transparent; }
+.code-wrapper pre::-webkit-scrollbar-thumb {
+  background-color: rgba(150, 150, 150, 0.3);
+  border-radius: 4px;
+}
+.code-wrapper pre::-webkit-scrollbar-thumb:hover { background-color: rgba(150, 150, 150, 0.6); }
+
+[data-theme="dark"] .code-wrapper pre::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+[data-theme="dark"] .code-wrapper pre::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+/* --------------------------------------------------------------------------
+   5. 独立页面 (Pages)
+   -------------------------------------------------------------------------- */
+/* 5.1 首页 Hero (Hero Section) */
+[data-theme="dark"] .hero.is-light {
+  background-color: var(--bg-dark) !important;
+  border-bottom: 1px solid var(--border-dark);
+}
+
+[data-theme="dark"] .hero.is-light .title {
+  color: var(--bulma-text-strong) !important;
+}
+
+[data-theme="dark"] .hero.is-light .subtitle {
+  color: var(--text-dark-muted) !important;
+}
+
+/* 5.2 关于页 (About) */
+.about-card {
+  background: linear-gradient(135deg, var(--bulma-scheme-main), var(--bulma-scheme-main-bis));
+  border: 1px solid var(--bulma-border-weak);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.about-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1); }
+
+[data-theme="dark"] .about-card {
+  background: linear-gradient(135deg, var(--bg-dark-card), var(--bg-dark-card-hover));
+  border-color: #333;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.about-avatar {
+  border: 4px solid var(--bulma-scheme-main);
+  box-shadow: 0 0 0 2px var(--bulma-primary-soft), 0 8px 24px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+  object-fit: cover;
+}
+
+.about-avatar:hover { transform: scale(1.05); }
+
+.about-content-text { padding-left: 2rem; padding-right: 2rem; }
+.about-content-text p { font-size: 1.1rem; line-height: 1.8; color: var(--bulma-text); }
+[data-theme="dark"] .about-content-text p { color: #ccc; }
+
+[data-theme="dark"] .about-card .tag.is-light {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: #e0e0e0 !important;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .about-card .button.is-primary.is-light {
+  background-color: rgba(0, 200, 150, 0.15) !important;
+  color: var(--bulma-primary) !important;
+  border: 1px solid rgba(0, 200, 150, 0.3);
+  transition: all 0.2s ease;
+}
+
+[data-theme="dark"] .about-card .button.is-primary.is-light:hover {
+  background-color: var(--bulma-primary) !important;
+  color: var(--bg-dark) !important;
+  border-color: var(--bulma-primary);
+}
+
+/* 5.3 友链页 (Links) */
+[data-theme="dark"] .links-page .button.is-light {
+  background-color: var(--border-dark) !important;
+  color: #ddd !important;
+  border: 1px solid #444;
+}
+
+/* --------------------------------------------------------------------------
+   6. 全局辅助组件 (Global Helpers)
+   -------------------------------------------------------------------------- */
+/* 回到顶部按钮 */
+#back-to-top {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+  transform: translateY(10px);
+}
+
+#back-to-top.is-visible { opacity: 1; visibility: visible; transform: translateY(0); }
+
+/* 阅读进度条 */
+#reading-progress {
+  position: fixed;
+  top: 3.25rem;
+  left: 0;
+  height: 3px;
+  background-color: var(--bulma-primary);
+  z-index: 1000;
+  width: 0%;
+  transition: width 0.1s ease-out;
+}
+
+/* 深色模式标题亮度控制 */
+[data-theme="dark"] .title,
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] h5,
+[data-theme="dark"] h6 {
+  color: #d1d5db !important;
+}
+
+[data-theme="dark"] #post-header .title {
+  color: #e5e7eb !important;
+}
+
+[data-theme="dark"] .title a,
+[data-theme="dark"] h1 a,
+[data-theme="dark"] h2 a {
+  color: inherit;
+}
