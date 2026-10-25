@@ -10,6 +10,15 @@
   <link id="hljs-theme" rel="stylesheet" href="libs/github.min.css" />
   <link rel="stylesheet" href="custom.css" />
   <link rel="stylesheet" href="custom-themes.css" />
+  <!-- Anti-FOUC: 防止页面刷新时主题闪烁 -->
+  <script>
+    (function() {
+      var mode = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      if (mode === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+      var palette = localStorage.getItem('palette') || 'default';
+      if (palette !== 'default') document.documentElement.setAttribute('data-palette', palette);
+    })();
+  </script>
 </head>
 <body>
   <div id="site-navbar"></div>
@@ -44,6 +53,7 @@
   <script src="js/post.js" defer></script>
   <script src="js/theme.js" defer></script>`r`n</body>
 </html>
+
 
 
 
