@@ -253,10 +253,33 @@ function renderList() {
 
 async function initHome() {
   const config = await initLayout("index.html");
+  // 渲染 Hero
+  const hero = (config && config.hero) || {};
+  const heroTitle = document.getElementById("hero-title");
+  const heroSubtitle = document.getElementById("hero-subtitle");
+  if (heroTitle) heroTitle.textContent = hero.title || "";
+  if (heroSubtitle) heroSubtitle.textContent = hero.subtitle || "";
+
   SITE_CONFIG = config || {};
   const statusEl = document.getElementById("post-status");
   
   const profileEl = document.getElementById("sidebar-profile");
+    // 渲染侧边栏项目（取前 2 条）
+  const sidebarProjects = document.getElementById("sidebar-projects");
+  if (sidebarProjects) {
+    let projects = [];
+    try {
+      const res = await fetch("projects.json");
+      if (res.ok) projects = await res.json();
+    } catch (e) { projects = window.__PROJECTS_FALLBACK__ || []; }
+    sidebarProjects.innerHTML = projects.slice(0, 2).map(p => `
+      <li class="mb-2">
+        <a href="${p.url}" target="_blank" class="is-size-6">${p.name}</a>
+        <p class="is-size-7 has-text-grey">${p.description || ""}</p>
+      </li>
+    `).join("");
+  }
+
   if (profileEl && config && config.author) {
     const a = config.author;
     profileEl.innerHTML = `

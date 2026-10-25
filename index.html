@@ -15,8 +15,8 @@
   <section class="hero is-light" style="margin-top: 3.25rem;">
     <div class="hero-body py-6">
       <div class="container">
-        <h1 class="title is-2 mb-3">你好，欢迎来到我的数字花园 🌱</h1>
-        <p class="subtitle is-5 has-text-grey">记录代码、思考与生活的碎片。</p>
+        <h1 id="hero-title" class="title is-2 mb-3"></h1>
+        <p id="hero-subtitle" class="subtitle is-5 has-text-grey"></p>
       </div>
     </div>
   </section>
@@ -40,16 +40,7 @@
           <!-- 推荐项目 (静态展示) -->
           <div class="box mb-5" style="border-radius: var(--bulma-radius-large);">
             <h3 class="title is-5 mb-3"><i class="fas fa-code-branch has-text-primary mr-2"></i>开源项目</h3>
-            <ul class="menu-list">
-              <li class="mb-2">
-                <a href="https://github.com/" target="_blank" class="is-size-6">My Blog</a>
-                <p class="is-size-7 has-text-grey">基于 Bulma 的极简静态博客。</p>
-              </li>
-              <li>
-                <a href="https://github.com/" target="_blank" class="is-size-6">Todo App</a>
-                <p class="is-size-7 has-text-grey">原生 JS 待办应用。</p>
-              </li>
-            </ul>
+            <ul id="sidebar-projects" class="menu-list"></ul>
             <div class="has-text-right mt-3">
               <a href="projects.html" class="is-size-7 has-text-link">查看全部 →</a>
             </div>
