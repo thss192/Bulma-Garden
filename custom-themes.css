@@ -128,3 +128,38 @@
 .palette-btn[data-palette="ocean"]   { background: linear-gradient(135deg,#2196f3,#4fc3f7); }
 .palette-btn[data-palette="sunset"]  { background: linear-gradient(135deg,#ff7043,#ffb74d); }
 .palette-btn[data-palette="mono"]    { background: linear-gradient(135deg,#4b5563,#d1d5db); }
+
+/* ===== 修复原生深色导航栏 ===== */
+[data-theme="dark"] .navbar.is-fixed-top {
+  background-color: rgba(18, 18, 18, 0.75) !important;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* ===== 修复深色模式下的浅色横幅（Hero） ===== */
+[data-theme="dark"] .hero.is-light {
+  background-color: var(--bg-dark) !important;
+  border-bottom: 1px solid var(--border-dark);
+  color: var(--bulma-text-strong);
+}
+[data-theme="dark"] .hero.is-light .title {
+  color: #f3f4f6 !important;
+}
+[data-theme="dark"] .hero.is-light .subtitle {
+  color: var(--text-dark-muted) !important;
+}
+
+/* ===== 强制强化面板按钮的选中状态 ===== */
+#theme-panel .mode-btn.is-active {
+  background-color: var(--bulma-primary) !important;
+  color: var(--bulma-primary-invert) !important;
+  border: 2px solid var(--bulma-primary) !important;
+  font-weight: 700 !important;
+}
+
+#theme-panel .palette-btn.is-active {
+  border: 3px solid #ffffff !important;
+  box-shadow: 0 0 0 2px #000000, 0 0 10px rgba(0,0,0,0.5) !important;
+  transform: scale(1.05) !important;
+  z-index: 1;
+}

@@ -60,15 +60,44 @@
   };
 
   // ---------- UI 同步 ----------
+    // ---------- UI 同步 ----------
+    // ---------- UI 同步 ----------
   const syncUI = () => {
     const mode = currentMode();
     const palette = currentPalette();
-    document.querySelectorAll("#theme-panel .mode-btn").forEach(b =>
-      b.classList.toggle("is-active", b.dataset.mode === mode)
-    );
-    document.querySelectorAll("#theme-panel .palette-btn").forEach(b =>
-      b.classList.toggle("is-active", b.dataset.palette === palette)
-    );
+    
+    // 同步模式按钮
+    document.querySelectorAll("#theme-panel .mode-btn").forEach(b => {
+      if (b.dataset.mode === mode) {
+        b.classList.add("is-active");
+        b.style.border = "2px solid var(--bulma-primary)";
+        b.style.backgroundColor = "var(--bulma-primary)";
+        b.style.color = "var(--bulma-primary-invert)";
+        b.style.opacity = "1";
+      } else {
+        b.classList.remove("is-active");
+        b.style.border = "";
+        b.style.backgroundColor = "";
+        b.style.color = "";
+        b.style.opacity = "0.6";
+      }
+    });
+
+    // 同步配色按钮
+    document.querySelectorAll("#theme-panel .palette-btn").forEach(b => {
+      if (b.dataset.palette === palette) {
+        b.classList.add("is-active");
+        b.style.border = "3px solid #fff";
+        b.style.boxShadow = "0 0 0 2px #000, 0 0 10px rgba(0,0,0,0.5)";
+        b.style.transform = "scale(1.05)";
+      } else {
+        b.classList.remove("is-active");
+        b.style.border = "2px solid transparent";
+        b.style.boxShadow = "none";
+        b.style.transform = "";
+        b.style.opacity = "0.8";
+      }
+    });
   };
 
   // ---------- 面板构建 ----------
@@ -173,3 +202,5 @@
     init();
   }
 })();
+
+
