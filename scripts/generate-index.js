@@ -55,8 +55,18 @@ files.forEach(f => {
   searchIndex.push({ slug, title: meta.title || slug, content: plainText });
 });
 
-fs.writeFileSync(path.join(postsDir, "index.json"), JSON.stringify(posts, null, 2), "utf8");
-fs.writeFileSync(path.join(postsDir, "search-index.json"), JSON.stringify(searchIndex), "utf8");
+const indexStr = JSON.stringify(posts, null, 2);
+const indexPath = path.join(postsDir, "index.json");
+if (!fs.existsSync(indexPath) || fs.readFileSync(indexPath, "utf8") !== indexStr) {
+  fs.writeFileSync(indexPath, indexStr, "utf8");
+  console.log("  -> 更新了 posts/index.json");
+}
+const searchStr = JSON.stringify(searchIndex);
+const searchPath = path.join(postsDir, "search-index.json");
+if (!fs.existsSync(searchPath) || fs.readFileSync(searchPath, "utf8") !== searchStr) {
+  fs.writeFileSync(searchPath, searchStr, "utf8");
+  console.log("  -> 更新了 posts/search-index.json");
+}
 
 // 同步文章清单到 js/fallback-data.js 的 __POSTS_FALLBACK__
 function syncFallback(posts) {
@@ -74,7 +84,10 @@ function syncFallback(posts) {
     return;
   }
   const next = src.slice(0, start) + marker + " " + JSON.stringify(posts, null, 2) + ";" + src.slice(end + 2);
-  fs.writeFileSync(fallbackPath, next, "utf8");
+  if (src !== next) {
+    fs.writeFileSync(fallbackPath, next, "utf8");
+    console.log("  -> 更新了 js/fallback-data.js (文章列表)");
+  }
 }
 
 // 同步 config.json 到 js/fallback-data.js 的 __CONFIG__
@@ -94,7 +107,10 @@ function syncConfigToFallback() {
   const end = fb.indexOf("};\n", start);
   if (end === -1) { console.warn("[warn] __CONFIG__ 段未正常结束"); return; }
   const next = fb.slice(0, start) + marker + " " + JSON.stringify(cfg, null, 2) + ";" + fb.slice(end + 3);
-  fs.writeFileSync(fbPath, next, "utf8");
+  if (fb !== next) {
+    fs.writeFileSync(fbPath, next, "utf8");
+    console.log("  -> 更新了 js/fallback-data.js (站点配置)");
+  }
   console.log("[ok] config.json 已同步到 fallback-data.js 的 __CONFIG__");
 }
 
