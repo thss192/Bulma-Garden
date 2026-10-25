@@ -17,7 +17,7 @@ async function initProjects() {
     const tags = (p.tags || []).map(t => `<span class="tag is-link is-light mr-1">${t}</span>`).join("");
     
     // 根据项目性质生成一个装饰性图标
-    const projectIcon = p.name.toLowerCase().includes("blog") ? "fa-blog" : (p.name.toLowerCase().includes("todo") ? "fa-list-check" : "fa-cube");
+    const projectIcon = p.icon || "fa-cube";
 
     return `
       <div class="column is-6">
