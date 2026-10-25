@@ -55,4 +55,26 @@ files.forEach(f => {
 fs.writeFileSync(path.join(postsDir, "index.json"), JSON.stringify(posts, null, 2), "utf8");
 fs.writeFileSync(path.join(postsDir, "search-index.json"), JSON.stringify(searchIndex), "utf8");
 
-console.log(`✅ 解析完成，包含 order 字段，共 ${posts.length} 篇文章。`);
+// 同步文章清单到 js/fallback-data.js 的 __POSTS_FALLBACK__
+function syncFallback(posts) {
+  const fallbackPath = path.join(__dirname, "..", "js", "fallback-data.js");
+  let src = fs.readFileSync(fallbackPath, "utf8");
+  const marker = "window.__POSTS_FALLBACK__ =";
+  const start = src.indexOf(marker);
+  if (start === -1) {
+    console.warn("[warn] fallback-data.js 未找到 __POSTS_FALLBACK__，跳过同步");
+    return;
+  }
+  const end = src.indexOf("];", start);
+  if (end === -1) {
+    console.warn("[warn] fallback-data.js 的 __POSTS_FALLBACK__ 段未正常结束，跳过同步");
+    return;
+  }
+  const next = src.slice(0, start) + marker + " " + JSON.stringify(posts, null, 2) + ";" + src.slice(end + 2);
+  fs.writeFileSync(fallbackPath, next, "utf8");
+}
+
+syncFallback(posts);
+
+console.log(✅ 解析完成，包含 order 字段，共 ${posts.length} 篇文章。`);
+
