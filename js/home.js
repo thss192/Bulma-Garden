@@ -19,6 +19,37 @@ async function loadPostIndex() {
   }
 }
 
+// ================= 新增：打字机效果 =================
+function typeWriter(element, text, speed = 100) {
+  let i = 0;
+  element.textContent = ""; 
+  // 核心修复：使用 Array.from 将字符串拆分为正确的字符（包含完整的 Emoji）
+  const chars = Array.from(text); 
+  return new Promise((resolve) => {
+    function type() {
+      if (i < chars.length) {
+        element.textContent += chars[i];
+        i++;
+        setTimeout(type, speed);
+      } else {
+        resolve();
+      }
+    }
+    type();
+  });
+}
+
+// ================= 新增：动态时间问候 =================
+function getDynamicGreeting() {
+  const hour = new Date().getHours();
+  if (hour >= 5 && hour < 9) return "🌅 早上好，新的一天开始了";
+  if (hour >= 9 && hour < 12) return "☀️ 上午好，专注高效";
+  if (hour >= 12 && hour < 14) return "🍵 中午好，记得午休哦";
+  if (hour >= 14 && hour < 18) return "☕ 下午好，来杯咖啡吧";
+  if (hour >= 18 && hour < 22) return "🌇 晚上好，今天过得怎么样？";
+  return "🌙 夜深了，早点休息哦";
+}
+
 function renderCard(post) {
   const tags = (post.tags || []).map(t => `<span class="tag is-info is-light mr-1">${t}</span>`).join("");
   return `
@@ -81,11 +112,9 @@ function renderSeriesPaginated(seriesName, postsInSeries, containerId) {
 
   if (!SERIES_PAGES[seriesName]) SERIES_PAGES[seriesName] = 1;
   
-  // 使用当前的排序模式
   const sortMode = SERIES_SORTS[seriesName];
   const currentPage = SERIES_PAGES[seriesName];
 
-  // 根据排序模式处理
   const sortedPosts = [...postsInSeries].sort((a, b) => {
     if (sortMode === "order") return (a.order || 0) - (b.order || 0);
     const dateA = new Date(a.date).getTime();
@@ -152,14 +181,12 @@ function renderList() {
   let html = "";
   let seriesIndex = 0;
   
-  // 读取全局默认配置
   const defaultSort = (SITE_CONFIG && SITE_CONFIG.defaultSort) ? SITE_CONFIG.defaultSort : "desc";
 
   for (const [seriesName, postsInSeries] of Object.entries(grouped)) {
     const containerId = `series-content-${seriesIndex}`;
     if (!SERIES_PAGES[seriesName]) SERIES_PAGES[seriesName] = 1;
     
-    // 初始排序状态
     if (!SERIES_SORTS[seriesName]) {
       const savedSort = localStorage.getItem(`seriesSort_${seriesName}`);
       SERIES_SORTS[seriesName] = savedSort || defaultSort;
@@ -183,7 +210,6 @@ function renderList() {
             </div>
             
             <div class="is-flex is-align-items-center ml-auto">
-              <!-- 排序选择器 -->
               <div class="select is-small is-rounded mr-4">
                 <select class="sort-select" data-series="${seriesName}" style="background-color: var(--bulma-scheme-main-bis); border-color: var(--bulma-border-weak);">
                   <option value="asc" ${currentSort === 'asc' ? 'selected' : ''}>时间正序</option>
@@ -205,7 +231,6 @@ function renderList() {
 
   listEl.innerHTML = html;
 
-  // 绑定折叠事件
   listEl.querySelectorAll(".toggle-trigger").forEach(trigger => {
     trigger.addEventListener("click", (e) => {
       if (e.target.closest(".select")) return;
@@ -222,7 +247,6 @@ function renderList() {
     });
   });
 
-  // 绑定排序下拉事件
   listEl.querySelectorAll(".sort-select").forEach(select => {
     select.addEventListener("change", (e) => {
       e.stopPropagation();
@@ -230,14 +254,12 @@ function renderList() {
       const newSort = e.target.value;
       
       SERIES_SORTS[sName] = newSort;
-      SERIES_PAGES[sName] = 1; // 重置页码
-      localStorage.setItem(`seriesSort_${sName}`, newSort); // 记忆用户的选择
+      SERIES_PAGES[sName] = 1; 
+      localStorage.setItem(`seriesSort_${sName}`, newSort); 
       
-      // 仅重新渲染当前内容区
       const accordion = select.closest(".series-accordion");
       const containerId = accordion.querySelector(".series-content").id;
       
-      // 重新获取当前的系列数据
       let filteredPosts = ACTIVE_TAG === "__all__" ? ALL_POSTS : ALL_POSTS.filter(p => (p.tags || []).includes(ACTIVE_TAG));
       const grouped = {};
       filteredPosts.forEach(post => {
@@ -253,26 +275,35 @@ function renderList() {
 
 async function initHome() {
   const config = await initLayout("index.html");
-  // 渲染 Hero
+  
+  // 渲染 Hero (加入打字机)
   const hero = (config && config.hero) || {};
   const heroTitle = document.getElementById("hero-title");
   const heroSubtitle = document.getElementById("hero-subtitle");
-  if (heroTitle) heroTitle.textContent = hero.title || "";
+  
+  if (heroTitle) {
+    const textToType = hero.title || "";
+    heroTitle.innerHTML = '<span id="typewriter-text"></span><span class="cursor" style="display:inline-block;width:3px;height:1em;background:var(--bulma-primary);vertical-align:text-bottom;margin-left:2px;animation:blink 0.8s infinite;"></span>';
+    typeWriter(document.getElementById("typewriter-text"), textToType, 100);
+  }
   if (heroSubtitle) heroSubtitle.textContent = hero.subtitle || "";
 
   SITE_CONFIG = config || {};
   const statusEl = document.getElementById("post-status");
   
   const profileEl = document.getElementById("sidebar-profile");
-    // 渲染侧边栏项目（取前 2 条）
   const sidebarProjects = document.getElementById("sidebar-projects");
+  
+  // 渲染侧边栏项目
   if (sidebarProjects) {
     let projects = [];
     try {
       const res = await fetch("projects.json");
       if (res.ok) projects = await res.json();
-    } catch (e) { projects = window.__PROJECTS_FALLBACK__ || [];
-      if (!projects.length) projects = [{name: 'My Blog', url:'#', description:'My Blog'}, {name:'Todo App', url:'#', description:'Todo App'}]; }
+    } catch (e) { 
+      projects = window.__PROJECTS_FALLBACK__ || [];
+      if (!projects.length) projects = [{name: 'My Blog', url:'#', description:'My Blog'}, {name:'Todo App', url:'#', description:'Todo App'}]; 
+    }
     sidebarProjects.innerHTML = projects.slice(0, 2).map(p => `
       <li class="mb-2">
         <a href="${p.url}" target="_blank" class="is-size-6">${p.name}</a>
@@ -281,13 +312,20 @@ async function initHome() {
     `).join("");
   }
 
+  // 渲染个人名片 (加入动态问候)
   if (profileEl && config && config.author) {
     const a = config.author;
+    const greeting = getDynamicGreeting();
     profileEl.innerHTML = `
       <div class="box has-text-centered" style="border-radius: var(--bulma-radius-large);">
         <figure class="image is-96x96 is-inline-block mb-3"><img class="is-rounded" src="${a.avatar || "images/avatar.png"}" style="object-fit: cover;"></figure>
         <h3 class="title is-5 mb-1">${a.name || "佚名"}</h3>
-        <p class="is-size-7 has-text-grey mb-3">${a.bio || "开发者"}</p>
+        <p class="is-size-7 has-text-grey mb-2">${a.bio || "开发者"}</p>
+        <!-- 动态问候 -->
+        <div class="has-text-primary is-size-7 mb-3 font-weight-bold" style="background: var(--bulma-primary-soft); padding: 0.2rem 0.5rem; border-radius: 4px; display: inline-block;">
+          ${greeting}
+        </div>
+        <br>
         <a href="about.html" class="button is-small is-rounded is-light">了解更多</a>
       </div>
     `;
@@ -315,3 +353,4 @@ async function initHome() {
 }
 
 initHome();
+
