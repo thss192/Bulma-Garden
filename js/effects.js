@@ -1,16 +1,31 @@
-﻿// 完美版 Particle Effects (星星重构 + 点击爆炸扩散 + 1.5s 寿命)
+﻿// 极致性能版 Particle Effects (去光晕，缓存变量，控制上限)
 (function () {
   const canvas = document.createElement("canvas");
   canvas.id = "effects-canvas";
   canvas.style.cssText = "position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:1;";
   document.body.appendChild(canvas);
 
-  const ctx = canvas.getContext("2d");
+  const ctx = canvas.getContext("2d", { alpha: true });
   let particles = [];
   let animId = null;
   
   let currentEffect = localStorage.getItem("effect") || "flower";
   let currentOpacity = parseFloat(localStorage.getItem("effect_opacity") || "0.6");
+
+  // 缓存颜色，防止每帧重排（极度影响性能）
+  let cachedColor = { r: 0, g: 209, b: 178 }; // 默认薄荷绿 RGB
+  
+  const updateThemeColor = () => {
+    const hex = getComputedStyle(document.documentElement).getPropertyValue("--bulma-primary").trim();
+    if (hex && hex.startsWith("#")) {
+      // 将 hex 转为 RGB 并缓存
+      const bigint = parseInt(hex.slice(1), 16);
+      cachedColor = { r: (bigint >> 16) & 255, g: (bigint >> 8) & 255, b: bigint & 255 };
+    }
+  };
+  // 初始化和主题切换时更新颜色
+  setTimeout(updateThemeColor, 500);
+  window.__updateEffectColor = updateThemeColor;
 
   const resize = () => {
     canvas.width = window.innerWidth;
@@ -19,117 +34,72 @@
   window.addEventListener("resize", resize);
   resize();
 
-  const getThemeColor = (hexFallback) => {
-    const primary = getComputedStyle(document.documentElement).getPropertyValue("--bulma-primary").trim();
-    return primary || hexFallback;
-  };
-
   class Particle {
     constructor(type, isClick) {
       this.type = type;
       this.isClick = isClick;
-      
-      // 坐标
       this.x = isClick ? isClick.x : Math.random() * canvas.width;
       this.y = isClick ? isClick.y : -30; 
-      
-      // 大小
       this.size = isClick ? Math.random() * 8 + 6 : Math.random() * 6 + 4;
       
-      // 运动学参数
       if (isClick) {
-        // === 点击爆炸效果 ===
-        // 随机角度，全向扩散
         const angle = Math.random() * Math.PI * 2;
-        // 速度不一致：基础速度 + 随机增量
         const speed = Math.random() * 4 + 2; 
         this.vx = Math.cos(angle) * speed;
         this.vy = Math.sin(angle) * speed;
-        // 爆炸受到的阻力（摩擦力）
         this.friction = 0.96;
-        
-        // 存活时间：1.5s
-        this.maxLife = 1500; // 毫秒
+        this.maxLife = 1500;
         this.birth = performance.now();
-        this.life = 1; 
       } else {
-        // === 背景自然飘落 ===
         this.vx = (Math.random() - 0.5) * 1.2;
         this.vy = type === "star" ? Math.random() * 1 + 0.5 : Math.random() * 1.5 + 1;
-        this.life = 1;
         this.decay = 0.002;
       }
-      
+      this.life = 1;
       this.rotation = Math.random() * Math.PI * 2;
       this.rotSpeed = (Math.random() - 0.5) * 0.04;
-      
-      this.twinkleSpeed = Math.random() * 0.05 + 0.02;
-      this.twinklePhase = Math.random() * Math.PI * 2;
     }
 
     update(now) {
       if (this.isClick) {
-        // 1.5秒衰减计算
-        const age = now - this.birth;
-        this.life = Math.max(0, 1 - age / this.maxLife);
-
-        // 物理运动（施加摩擦）
+        this.life = Math.max(0, 1 - (now - this.birth) / this.maxLife);
         this.vx *= this.friction;
         this.vy *= this.friction;
         this.x += this.vx;
         this.y += this.vy;
       } else {
-        // 自然飘落
         this.x += this.vx;
         this.y += this.vy;
         this.life -= this.decay;
-        if (this.y > canvas.height + 50 || this.x < -50 || this.x > canvas.width + 50) {
-          this.life = 0;
-        }
+        if (this.y > canvas.height + 50 || this.x < -50 || this.x > canvas.width + 50) this.life = 0;
       }
-
       this.rotation += this.rotSpeed;
-      if (this.type === "star") {
-        this.twinklePhase += this.twinkleSpeed;
-      }
     }
 
     draw() {
+      const alpha = Math.max(0, this.life) * currentOpacity;
+      if (alpha <= 0) return;
+
       ctx.save();
       ctx.translate(this.x, this.y);
-      
-      if (this.type === "star") {
-        ctx.rotate(this.rotation * 0.2); 
-      } else {
-        ctx.rotate(this.rotation);
-      }
-      
-      const twinkle = this.type === "star" ? (Math.sin(this.twinklePhase) * 0.3 + 0.7) : 1;
-      ctx.globalAlpha = Math.max(0, this.life) * currentOpacity * twinkle;
+      ctx.rotate(this.rotation);
 
-      const color = getThemeColor("#00d1b2");
-      
+      // 性能优化：直接用 rgba 渲染，不再使用 globalAlpha
+      const { r, g, b } = cachedColor;
+
       if (this.type === "star") {
-        ctx.fillStyle = color;
+        // 双层绘制模拟发光（极速）
+        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha * 0.4})`;
+        ctx.beginPath(); ctx.arc(0, 0, this.size * 0.5, 0, Math.PI * 2); ctx.fill();
+
+        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
         ctx.beginPath();
-        ctx.arc(0, 0, this.size * 0.2, 0, Math.PI * 2);
-        ctx.fill();
-        
         const s = this.size;
-        ctx.beginPath();
-        ctx.moveTo(0, -s);
-        ctx.quadraticCurveTo(0, 0, s, 0);
-        ctx.quadraticCurveTo(0, 0, 0, s);
-        ctx.quadraticCurveTo(0, 0, -s, 0);
-        ctx.quadraticCurveTo(0, 0, 0, -s);
-        ctx.fill();
-        
-        ctx.shadowColor = color;
-        ctx.shadowBlur = 10;
-        ctx.fill();
-        ctx.shadowBlur = 0;
+        ctx.moveTo(0, -s); ctx.quadraticCurveTo(0, 0, s, 0);
+        ctx.quadraticCurveTo(0, 0, 0, s); ctx.quadraticCurveTo(0, 0, -s, 0);
+        ctx.quadraticCurveTo(0, 0, 0, -s); ctx.fill();
       } else if (this.type === "heart") {
-        ctx.fillStyle = "#ff4d6d";
+        ctx.fillStyle = `rgba(255, 77, 109, ${alpha})`;
         ctx.beginPath();
         ctx.moveTo(0, this.size * 0.3);
         ctx.bezierCurveTo(0, 0, -this.size, -this.size * 0.2, -this.size, -this.size * 0.8);
@@ -138,7 +108,7 @@
         ctx.bezierCurveTo(this.size, -this.size * 0.2, 0, 0, 0, this.size * 0.3);
         ctx.fill();
       } else if (this.type === "flower") {
-        ctx.fillStyle = "#ffb7c5";
+        ctx.fillStyle = `rgba(255, 183, 197, ${alpha})`;
         ctx.beginPath();
         const petals = 5;
         for (let i = 0; i < petals; i++) {
@@ -156,8 +126,9 @@
   const loop = (now) => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    // 背景持续生成
-    if (currentEffect !== "none" && Math.random() < 0.08) {
+    // 性能优化：背景粒子数量上限 60，点击粒子上限 100
+    const bgCount = particles.filter(p => !p.isClick).length;
+    if (currentEffect !== "none" && bgCount < 60 && Math.random() < 0.08) {
       particles.push(new Particle(currentEffect, null));
     }
 
@@ -175,7 +146,10 @@
     if (currentEffect === "none") return;
     if (e.target.closest("button") || e.target.closest("a") || e.target.closest("input")) return;
 
-    // 点击产生 15 个粒子四处扩散
+    // 性能优化：防止狂点导致卡顿
+    const clickCount = particles.filter(p => p.isClick).length;
+    if (clickCount > 100) return;
+
     const count = 15;
     for (let i = 0; i < count; i++) {
       particles.push(new Particle(currentEffect, { x: e.clientX, y: e.clientY }));

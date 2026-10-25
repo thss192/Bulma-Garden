@@ -107,14 +107,14 @@
       const modeBtn = e.target.closest(".mode-btn");
       if (modeBtn) {
         localStorage.setItem(KEY_MODE, modeBtn.dataset.mode);
-        window.__applyTheme();
+        window.__applyTheme(); if(window.__updateEffectColor) window.__updateEffectColor();
         setTimeout(syncUI, 0); 
         return;
       }
       const palBtn = e.target.closest(".palette-btn");
       if (palBtn) {
         localStorage.setItem(KEY_PALETTE, palBtn.dataset.palette);
-        window.__applyTheme();
+        window.__applyTheme(); if(window.__updateEffectColor) window.__updateEffectColor();
         setTimeout(syncUI, 0); 
         return;
       }
@@ -143,3 +143,4 @@
     init();
   }
 })();
+
