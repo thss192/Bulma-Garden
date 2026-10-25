@@ -76,5 +76,5 @@ function syncFallback(posts) {
 
 syncFallback(posts);
 
-console.log(✅ 解析完成，包含 order 字段，共 ${posts.length} 篇文章。`);
+console.log(`✅ 解析完成，包含 order 字段，共 ${posts.length} 篇文章。`);
 
