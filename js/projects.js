@@ -1,13 +1,24 @@
 ﻿// 项目页：读取 projects.json，渲染立体感项目卡片
 async function initProjects() {
-  await initLayout("projects.html");
-    // 渲染页面标题/副标题
-  const pp = ((config.pageCopy) || {}).projectsPage || {};
+  let config = {};
+  try {
+    config = await initLayout("projects.html");
+  } catch (e) {
+    console.warn("initLayout 失败", e);
+  }
+
+  // 1. 渲染页面标题/副标题（读取 config 或兜底）
+  const pc = config || window.__CONFIG__ || {};
+  const pp = ((pc.pageCopy) || {}).projectsPage || {};
   const tEl = document.getElementById("page-title");
   const sEl = document.getElementById("page-subtitle");
   if (tEl) tEl.textContent = pp.title || "开源项目";
-  if (sEl) sEl.textContent = pp.subtitle || "";
-const el = document.getElementById("project-list");
+  if (sEl) sEl.textContent = pp.subtitle || "这里记录了我做过的一些开源项目与实战作品。";
+
+  // 2. 渲染项目卡片
+  const el = document.getElementById("project-list");
+  if (!el) return;
+
   let projects = [];
   try {
     const res = await fetch("projects.json");
@@ -18,11 +29,8 @@ const el = document.getElementById("project-list");
     else { el.innerHTML = `<div class="column is-12"><div class="notification is-danger">读取 projects.json 失败：${e.message}</div></div>`; return; }
   }
 
-  // 用动态渲染生成更具质感的卡片
   el.innerHTML = projects.map(p => {
     const tags = (p.tags || []).map(t => `<span class="tag is-link is-light mr-1">${t}</span>`).join("");
-    
-    // 根据项目性质生成一个装饰性图标
     const projectIcon = p.icon || "fa-cube";
 
     return `

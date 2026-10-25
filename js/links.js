@@ -5,13 +5,13 @@ async function initLinks() {
   const lp = ((config && config.pageCopy) || {}).linksPage || {};
   const tEl = document.getElementById("page-title");
   const sEl = document.getElementById("page-subtitle");
-  const nEl = document.getElementById("neighbors-title");
-  const mEl = document.getElementById("my-sites-title");
+  const nEl = document.getElementById("neighbors-title-text");
+  const mEl = document.getElementById("my-sites-title-text");
   const eEl = document.getElementById("exchange-note");
   if (tEl) tEl.textContent = lp.title || "连接";
   if (sEl) sEl.textContent = lp.subtitle || "";
-  if (nEl) nEl.innerHTML = `<i class="fas fa-link has-text-primary mr-2"></i>${lp.neighborsTitle || "我的邻居们"}`;
-  if (mEl) mEl.innerHTML = `<i class="fas fa-satellite-dish has-text-primary mr-2"></i>${lp.mySitesTitle || "我的阵地"}`;
+  if (nEl) nEl.textContent = lp.neighborsTitle || "我的邻居们"; else console.warn("no neighbors-title-text");
+  if (mEl) mEl.textContent = lp.mySitesTitle || "我的阵地";
   if (eEl) eEl.innerHTML = `<strong>${lp.exchangeTitle || "交换友链？"}</strong><br>${lp.exchangeNote || ""}`;
 const el = document.getElementById("link-list");
   const socialEl = document.getElementById("social-list");

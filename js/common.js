@@ -4,10 +4,11 @@ async function loadConfig() {
   try {
     const res = await fetch("config.json");
     if (!res.ok) throw new Error("HTTP " + res.status);
-    return await res.json();
+    const cfg = await res.json();
+    window.__CONFIG__ = cfg; // 成功时也存入全局
+    return cfg;
   } catch (e) {
     console.warn("读取 config.json 失败，使用内联兜底数据。");
-    // 如果 fetch 失败，直接使用 fallback-data.js 里定义的全局变量
     return window.__CONFIG__ || {};
   }
 }

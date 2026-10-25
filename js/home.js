@@ -271,7 +271,8 @@ async function initHome() {
     try {
       const res = await fetch("projects.json");
       if (res.ok) projects = await res.json();
-    } catch (e) { projects = window.__PROJECTS_FALLBACK__ || []; }
+    } catch (e) { projects = window.__PROJECTS_FALLBACK__ || [];
+      if (!projects.length) projects = [{name: 'My Blog', url:'#', description:'My Blog'}, {name:'Todo App', url:'#', description:'Todo App'}]; }
     sidebarProjects.innerHTML = projects.slice(0, 2).map(p => `
       <li class="mb-2">
         <a href="${p.url}" target="_blank" class="is-size-6">${p.name}</a>
