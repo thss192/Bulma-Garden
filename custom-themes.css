@@ -227,3 +227,45 @@
 .opacity-row input[type="range"]::-webkit-slider-thumb:hover {
   transform: scale(1.2);
 }
+
+/* ================= 终极滑块样式覆盖 ================= */
+.opacity-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1rem;
+  font-size: .8rem;
+  color: var(--bulma-text-light);
+  position: relative;
+  z-index: 10; /* 确保不被遮挡 */
+}
+
+.opacity-row input[type="range"] {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  width: 70% !important;
+  height: 6px !important;
+  border-radius: 3px !important;
+  background: var(--bulma-border-weak) !important;
+  outline: none !important;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+}
+[data-theme="dark"] .opacity-row input[type="range"] {
+  background: var(--border-dark) !important;
+}
+
+.opacity-row input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  width: 16px !important;
+  height: 16px !important;
+  border-radius: 50% !important;
+  background: var(--bulma-primary) !important;
+  cursor: pointer !important;
+  box-shadow: 0 0 6px rgba(0,0,0,0.4) !important;
+  transition: transform .1s !important;
+}
+.opacity-row input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2) !important;
+}

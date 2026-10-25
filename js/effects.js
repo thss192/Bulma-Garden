@@ -1,16 +1,14 @@
-﻿// 终极版 Particle Effects
+﻿// 完美版 Particle Effects (星星重构 + 透明度实时生效)
 (function () {
-  // 动态创建 Canvas，层级设为 z-index: 1，但不阻挡鼠标点击
   const canvas = document.createElement("canvas");
   canvas.id = "effects-canvas";
   canvas.style.cssText = "position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:1;";
-  document.body.appendChild(canvas); // 放到 body 最后
+  document.body.appendChild(canvas);
 
   const ctx = canvas.getContext("2d");
   let particles = [];
   let animId = null;
   
-  // 默认特效：flower，默认透明度：0.6
   let currentEffect = localStorage.getItem("effect") || "flower";
   let currentOpacity = parseFloat(localStorage.getItem("effect_opacity") || "0.6");
 
@@ -31,11 +29,9 @@
       this.type = type;
       this.isClick = isClick;
       this.x = isClick ? isClick.x : Math.random() * canvas.width;
-      this.y = isClick ? isClick.y : -30; // 从屏幕顶部上方开始
+      this.y = isClick ? isClick.y : -30; 
       
       this.size = isClick ? Math.random() * 8 + 6 : Math.random() * 6 + 4;
-      
-      // 下落速度
       this.speedX = (Math.random() - 0.5) * 1.2;
       this.speedY = type === "star" ? Math.random() * 1 + 0.5 : Math.random() * 1.5 + 1;
       
@@ -43,6 +39,10 @@
       this.decay = isClick ? 0.02 : 0.002;
       this.rotation = Math.random() * Math.PI * 2;
       this.rotSpeed = (Math.random() - 0.5) * 0.04;
+      
+      // 用于星星闪烁
+      this.twinkleSpeed = Math.random() * 0.05 + 0.02;
+      this.twinklePhase = Math.random() * Math.PI * 2;
     }
 
     update() {
@@ -50,6 +50,10 @@
       this.y += this.speedY;
       this.rotation += this.rotSpeed;
       
+      if (this.type === "star") {
+        this.twinklePhase += this.twinkleSpeed;
+      }
+
       if (this.isClick) {
         this.life -= 0.03;
       } else {
@@ -63,21 +67,45 @@
     draw() {
       ctx.save();
       ctx.translate(this.x, this.y);
-      ctx.rotate(this.rotation);
-      ctx.globalAlpha = Math.max(0, this.life) * currentOpacity;
+      
+      // 星星不随整体自转太夸张，加上闪烁
+      if (this.type === "star") {
+        ctx.rotate(this.rotation * 0.2); 
+      } else {
+        ctx.rotate(this.rotation);
+      }
+      
+      // 关键修复：实时读取 currentOpacity
+      const twinkle = this.type === "star" ? (Math.sin(this.twinklePhase) * 0.3 + 0.7) : 1;
+      ctx.globalAlpha = Math.max(0, this.life) * currentOpacity * twinkle;
 
       const color = getThemeColor("#00d1b2");
       
       if (this.type === "star") {
+        // ===== 极美的 4 角星光 (Sparkle) =====
         ctx.fillStyle = color;
+        // 核心亮点
         ctx.beginPath();
-        for (let i = 0; i < 4; i++) {
-          ctx.rotate(Math.PI / 2);
-          ctx.moveTo(0, 0);
-          ctx.quadraticCurveTo(this.size/2, this.size/2, 0, this.size);
-        }
+        ctx.arc(0, 0, this.size * 0.2, 0, Math.PI * 2);
         ctx.fill();
+        
+        // 十字星芒（用二次贝塞尔曲线内凹）
+        const s = this.size;
+        ctx.beginPath();
+        ctx.moveTo(0, -s); // 上
+        ctx.quadraticCurveTo(0, 0, s, 0); // 右上
+        ctx.quadraticCurveTo(0, 0, 0, s); // 右下
+        ctx.quadraticCurveTo(0, 0, -s, 0); // 左下
+        ctx.quadraticCurveTo(0, 0, 0, -s); // 左上
+        ctx.fill();
+        
+        // 添加一点光晕
+        ctx.shadowColor = color;
+        ctx.shadowBlur = 10;
+        ctx.fill();
+        ctx.shadowBlur = 0; // 恢复
       } else if (this.type === "heart") {
+        // ===== 爱心 =====
         ctx.fillStyle = "#ff4d6d";
         ctx.beginPath();
         ctx.moveTo(0, this.size * 0.3);
@@ -87,6 +115,7 @@
         ctx.bezierCurveTo(this.size, -this.size * 0.2, 0, 0, 0, this.size * 0.3);
         ctx.fill();
       } else if (this.type === "flower") {
+        // ===== 樱花 =====
         ctx.fillStyle = "#ffb7c5";
         ctx.beginPath();
         const petals = 5;
@@ -105,7 +134,6 @@
   const loop = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    // 持续生成背景粒子
     if (currentEffect !== "none" && Math.random() < 0.08) {
       particles.push(new Particle(currentEffect, null));
     }
@@ -120,7 +148,6 @@
     animId = requestAnimationFrame(loop);
   };
 
-  // 鼠标点击爆裂特效
   document.addEventListener("click", (e) => {
     if (currentEffect === "none") return;
     if (e.target.closest("button") || e.target.closest("a") || e.target.closest("input")) return;
@@ -131,7 +158,6 @@
     }
   });
 
-  // 暴露接口
   window.__setEffect = (effect) => {
     currentEffect = effect;
     localStorage.setItem("effect", effect);
@@ -148,7 +174,6 @@
     localStorage.setItem("effect_opacity", currentOpacity);
   };
 
-  // 初始启动（强制启动一次以确保可见）
   setTimeout(() => {
     if (currentEffect !== "none") loop();
   }, 500);
