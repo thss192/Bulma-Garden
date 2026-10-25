@@ -7,7 +7,7 @@ const indexJson = JSON.parse(fs.readFileSync(path.join(postsDir, "index.json"), 
 const config = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "config.json"), "utf8"));
 
 // 替换成你最终部署的域名
-const SITE_URL = "https://your-domain.com"; 
+const SITE_URL = config.siteUrl || "https://your-domain.com"; 
 
 let items = "";
 indexJson.forEach(post => {

@@ -1,6 +1,7 @@
-﻿{
+{
     "siteTitle":  "我的个人博客",
     "siteSubtitle":  "记录代码与生活",
+    "siteUrl":  "https://your-domain.com",
     "author":  {
                    "name":  "张三",
                    "bio":  "前端开发者，喜欢 CSS 和咖啡。",

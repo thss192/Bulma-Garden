@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+<channel>
+  <title>我的个人博客</title>
+  <link>https://your-domain.com</link>
+  <description>记录代码与生活</description>
+  <language>zh-CN</language>
+  
+    <item>
+      <title><![CDATA[01 - Bulma 的核心概念与安装]]></title>
+      <link>https://your-domain.com/post.html?slug=bulma-01</link>
+      <guid>https://your-domain.com/post.html?slug=bulma-01</guid>
+      <pubDate>Sat, 25 Oct 2025 00:00:00 GMT</pubDate>
+      <description><![CDATA[了解 Bulma 的纯 CSS 设计哲学，以及如何通过 CDN 快速引入。]]></description>
+    </item>
+  
+    <item>
+      <title><![CDATA[02 - 强大的栅格系统与列布局]]></title>
+      <link>https://your-domain.com/post.html?slug=bulma-02</link>
+      <guid>https://your-domain.com/post.html?slug=bulma-02</guid>
+      <pubDate>Sun, 26 Oct 2025 00:00:00 GMT</pubDate>
+      <description><![CDATA[掌握 Columns 和 Grid，轻松实现响应式网页布局。]]></description>
+    </item>
+  
+    <item>
+      <title><![CDATA[03 - 表单组件全解析：构建优雅的用户输入]]></title>
+      <link>https://your-domain.com/post.html?slug=bulma-03</link>
+      <guid>https://your-domain.com/post.html?slug=bulma-03</guid>
+      <pubDate>Mon, 27 Oct 2025 00:00:00 GMT</pubDate>
+      <description><![CDATA[输入框、下拉菜单、复选框以及如何优雅地排版表单。]]></description>
+    </item>
+  
+    <item>
+      <title><![CDATA[04 - 常用 UI 元素与卡片设计]]></title>
+      <link>https://your-domain.com/post.html?slug=bulma-04</link>
+      <guid>https://your-domain.com/post.html?slug=bulma-04</guid>
+      <pubDate>Tue, 28 Oct 2025 00:00:00 GMT</pubDate>
+      <description><![CDATA[使用 Box、Notification、Tag 和 Card 搭建美观的内容区块。]]></description>
+    </item>
+  
+    <item>
+      <title><![CDATA[05 - 导航栏（Navbar）与响应式菜单]]></title>
+      <link>https://your-domain.com/post.html?slug=bulma-05</link>
+      <guid>https://your-domain.com/post.html?slug=bulma-05</guid>
+      <pubDate>Wed, 29 Oct 2025 00:00:00 GMT</pubDate>
+      <description><![CDATA[打造完美的顶部导航与侧边菜单，适配移动端汉堡按钮。]]></description>
+    </item>
+  
+    <item>
+      <title><![CDATA[06 - 模态框（Modal）与消息提示（Message）]]></title>
+      <link>https://your-domain.com/post.html?slug=bulma-06</link>
+      <guid>https://your-domain.com/post.html?slug=bulma-06</guid>
+      <pubDate>Thu, 30 Oct 2025 00:00:00 GMT</pubDate>
+      <description><![CDATA[如何使用 Bulma 的弹窗覆盖层与组合式消息提示组件。]]></description>
+    </item>
+  
+    <item>
+      <title><![CDATA[07 - 使用 CSS 变量进行主题定制]]></title>
+      <link>https://your-domain.com/post.html?slug=bulma-07</link>
+      <guid>https://your-domain.com/post.html?slug=bulma-07</guid>
+      <pubDate>Fri, 31 Oct 2025 00:00:00 GMT</pubDate>
+      <description><![CDATA[拥抱 Bulma v1，通过简单的 CSS 变量覆盖，实现一键换肤与深色模式。]]></description>
+    </item>
+  
+    <item>
+      <title><![CDATA[一篇介绍 Bulma 的教程文章]]></title>
+      <link>https://your-domain.com/post.html?slug=bulma-tutorial</link>
+      <guid>https://your-domain.com/post.html?slug=bulma-tutorial</guid>
+      <pubDate>Sat, 25 Oct 2025 00:00:00 GMT</pubDate>
+      <description><![CDATA[本文带你快速了解 Bulma 框架的核心概念，包括变量、网格和响应式设计。]]></description>
+    </item>
+  
+    <item>
+      <title><![CDATA[你好，世界]]></title>
+      <link>https://your-domain.com/post.html?slug=hello-world</link>
+      <guid>https://your-domain.com/post.html?slug=hello-world</guid>
+      <pubDate>Wed, 01 Jan 2025 00:00:00 GMT</pubDate>
+      <description><![CDATA[这是第一篇示例文章。]]></description>
+    </item>
+  
+    <item>
+      <title><![CDATA[第二篇文章]]></title>
+      <link>https://your-domain.com/post.html?slug=second-post</link>
+      <guid>https://your-domain.com/post.html?slug=second-post</guid>
+      <pubDate>Sun, 05 Jan 2025 00:00:00 GMT</pubDate>
+      <description><![CDATA[演示多篇文章的列表渲染。]]></description>
+    </item>
+  
+</channel>
+</rss>
