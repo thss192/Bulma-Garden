@@ -38,6 +38,9 @@ files.forEach(f => {
   const slug = f.replace(/\.md$/, "");
   const bodyText = lines.slice(bodyStartIndex).join("\n");
 
+  if (!meta.title || !meta.date) {
+    console.warn(`[warn] ${f} 缺少 title 或 date，已用兜底值。解析结果：`, meta);
+  }
   posts.push({
     slug: slug,
     title: meta.title || slug,
