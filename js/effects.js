@@ -1,4 +1,4 @@
-﻿// 完美版 Particle Effects (星星重构 + 透明度实时生效)
+﻿// 完美版 Particle Effects (星星重构 + 点击爆炸扩散 + 1.5s 寿命)
 (function () {
   const canvas = document.createElement("canvas");
   canvas.id = "effects-canvas";
@@ -28,39 +28,69 @@
     constructor(type, isClick) {
       this.type = type;
       this.isClick = isClick;
+      
+      // 坐标
       this.x = isClick ? isClick.x : Math.random() * canvas.width;
       this.y = isClick ? isClick.y : -30; 
       
+      // 大小
       this.size = isClick ? Math.random() * 8 + 6 : Math.random() * 6 + 4;
-      this.speedX = (Math.random() - 0.5) * 1.2;
-      this.speedY = type === "star" ? Math.random() * 1 + 0.5 : Math.random() * 1.5 + 1;
       
-      this.life = 1;
-      this.decay = isClick ? 0.02 : 0.002;
+      // 运动学参数
+      if (isClick) {
+        // === 点击爆炸效果 ===
+        // 随机角度，全向扩散
+        const angle = Math.random() * Math.PI * 2;
+        // 速度不一致：基础速度 + 随机增量
+        const speed = Math.random() * 4 + 2; 
+        this.vx = Math.cos(angle) * speed;
+        this.vy = Math.sin(angle) * speed;
+        // 爆炸受到的阻力（摩擦力）
+        this.friction = 0.96;
+        
+        // 存活时间：1.5s
+        this.maxLife = 1500; // 毫秒
+        this.birth = performance.now();
+        this.life = 1; 
+      } else {
+        // === 背景自然飘落 ===
+        this.vx = (Math.random() - 0.5) * 1.2;
+        this.vy = type === "star" ? Math.random() * 1 + 0.5 : Math.random() * 1.5 + 1;
+        this.life = 1;
+        this.decay = 0.002;
+      }
+      
       this.rotation = Math.random() * Math.PI * 2;
       this.rotSpeed = (Math.random() - 0.5) * 0.04;
       
-      // 用于星星闪烁
       this.twinkleSpeed = Math.random() * 0.05 + 0.02;
       this.twinklePhase = Math.random() * Math.PI * 2;
     }
 
-    update() {
-      this.x += this.speedX;
-      this.y += this.speedY;
-      this.rotation += this.rotSpeed;
-      
-      if (this.type === "star") {
-        this.twinklePhase += this.twinkleSpeed;
-      }
-
+    update(now) {
       if (this.isClick) {
-        this.life -= 0.03;
+        // 1.5秒衰减计算
+        const age = now - this.birth;
+        this.life = Math.max(0, 1 - age / this.maxLife);
+
+        // 物理运动（施加摩擦）
+        this.vx *= this.friction;
+        this.vy *= this.friction;
+        this.x += this.vx;
+        this.y += this.vy;
       } else {
+        // 自然飘落
+        this.x += this.vx;
+        this.y += this.vy;
         this.life -= this.decay;
         if (this.y > canvas.height + 50 || this.x < -50 || this.x > canvas.width + 50) {
           this.life = 0;
         }
+      }
+
+      this.rotation += this.rotSpeed;
+      if (this.type === "star") {
+        this.twinklePhase += this.twinkleSpeed;
       }
     }
 
@@ -68,44 +98,37 @@
       ctx.save();
       ctx.translate(this.x, this.y);
       
-      // 星星不随整体自转太夸张，加上闪烁
       if (this.type === "star") {
         ctx.rotate(this.rotation * 0.2); 
       } else {
         ctx.rotate(this.rotation);
       }
       
-      // 关键修复：实时读取 currentOpacity
       const twinkle = this.type === "star" ? (Math.sin(this.twinklePhase) * 0.3 + 0.7) : 1;
       ctx.globalAlpha = Math.max(0, this.life) * currentOpacity * twinkle;
 
       const color = getThemeColor("#00d1b2");
       
       if (this.type === "star") {
-        // ===== 极美的 4 角星光 (Sparkle) =====
         ctx.fillStyle = color;
-        // 核心亮点
         ctx.beginPath();
         ctx.arc(0, 0, this.size * 0.2, 0, Math.PI * 2);
         ctx.fill();
         
-        // 十字星芒（用二次贝塞尔曲线内凹）
         const s = this.size;
         ctx.beginPath();
-        ctx.moveTo(0, -s); // 上
-        ctx.quadraticCurveTo(0, 0, s, 0); // 右上
-        ctx.quadraticCurveTo(0, 0, 0, s); // 右下
-        ctx.quadraticCurveTo(0, 0, -s, 0); // 左下
-        ctx.quadraticCurveTo(0, 0, 0, -s); // 左上
+        ctx.moveTo(0, -s);
+        ctx.quadraticCurveTo(0, 0, s, 0);
+        ctx.quadraticCurveTo(0, 0, 0, s);
+        ctx.quadraticCurveTo(0, 0, -s, 0);
+        ctx.quadraticCurveTo(0, 0, 0, -s);
         ctx.fill();
         
-        // 添加一点光晕
         ctx.shadowColor = color;
         ctx.shadowBlur = 10;
         ctx.fill();
-        ctx.shadowBlur = 0; // 恢复
+        ctx.shadowBlur = 0;
       } else if (this.type === "heart") {
-        // ===== 爱心 =====
         ctx.fillStyle = "#ff4d6d";
         ctx.beginPath();
         ctx.moveTo(0, this.size * 0.3);
@@ -115,7 +138,6 @@
         ctx.bezierCurveTo(this.size, -this.size * 0.2, 0, 0, 0, this.size * 0.3);
         ctx.fill();
       } else if (this.type === "flower") {
-        // ===== 樱花 =====
         ctx.fillStyle = "#ffb7c5";
         ctx.beginPath();
         const petals = 5;
@@ -131,15 +153,16 @@
     }
   }
 
-  const loop = () => {
+  const loop = (now) => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
+    // 背景持续生成
     if (currentEffect !== "none" && Math.random() < 0.08) {
       particles.push(new Particle(currentEffect, null));
     }
 
     for (let i = particles.length - 1; i >= 0; i--) {
-      particles[i].update();
+      particles[i].update(now);
       particles[i].draw();
       if (particles[i].life <= 0) {
         particles.splice(i, 1);
@@ -152,7 +175,8 @@
     if (currentEffect === "none") return;
     if (e.target.closest("button") || e.target.closest("a") || e.target.closest("input")) return;
 
-    const count = currentEffect === "heart" ? 12 : 8;
+    // 点击产生 15 个粒子四处扩散
+    const count = 15;
     for (let i = 0; i < count; i++) {
       particles.push(new Particle(currentEffect, { x: e.clientX, y: e.clientY }));
     }
@@ -161,7 +185,7 @@
   window.__setEffect = (effect) => {
     currentEffect = effect;
     localStorage.setItem("effect", effect);
-    if (effect !== "none" && !animId) loop();
+    if (effect !== "none" && !animId) requestAnimationFrame(loop);
     if (effect === "none") {
       particles = [];
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -175,6 +199,6 @@
   };
 
   setTimeout(() => {
-    if (currentEffect !== "none") loop();
+    if (currentEffect !== "none") requestAnimationFrame(loop);
   }, 500);
 })();
