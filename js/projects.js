@@ -1,7 +1,13 @@
 ﻿// 项目页：读取 projects.json，渲染立体感项目卡片
 async function initProjects() {
   await initLayout("projects.html");
-  const el = document.getElementById("project-list");
+    // 渲染页面标题/副标题
+  const pp = ((config.pageCopy) || {}).projectsPage || {};
+  const tEl = document.getElementById("page-title");
+  const sEl = document.getElementById("page-subtitle");
+  if (tEl) tEl.textContent = pp.title || "开源项目";
+  if (sEl) sEl.textContent = pp.subtitle || "";
+const el = document.getElementById("project-list");
   let projects = [];
   try {
     const res = await fetch("projects.json");

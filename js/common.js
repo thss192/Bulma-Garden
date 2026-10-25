@@ -270,6 +270,16 @@ async function initLayout(page) {
   renderNavbar(config, page);
   renderFooter(config);
   initSearchModal();
+  // 渲染 404 文案（只有 404.html 有这些元素）
+  const pc404 = (config.pageCopy || {}).page404 || {};
+  const ec = document.getElementById("error-code");
+  const et = document.getElementById("error-title");
+  const ed = document.getElementById("error-desc");
+  const bl = document.getElementById("back-home-label");
+  if (ec) ec.textContent = pc404.code || "404";
+  if (et) et.textContent = pc404.title || "页面走丢了";
+  if (ed) ed.textContent = pc404.description || "";
+  if (bl) bl.textContent = pc404.backHome || "返回首页";
   initBackToTop();
   return config;
 }
