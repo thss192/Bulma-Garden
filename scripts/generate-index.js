@@ -77,6 +77,12 @@ function syncFallback(posts) {
   fs.writeFileSync(fallbackPath, next, "utf8");
 }
 
+const DRY_RUN = process.argv.includes("--dry-run");
+if (DRY_RUN) {
+  console.log("[dry-run] 解析结果（不会写入任何文件）：");
+  console.log(JSON.stringify(posts, null, 2));
+  process.exit(0);
+}
 syncFallback(posts);
 
 console.log(`✅ 解析完成，包含 order 字段，共 ${posts.length} 篇文章。`);
