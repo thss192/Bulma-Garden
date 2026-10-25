@@ -6,7 +6,7 @@
    1. 全局变量与基础 (Variables & Base)
    -------------------------------------------------------------------------- */
 :root {
-  /* 覆盖 Bulma 主色与链接色 */
+  /* 覆盖 Bulma 主色与链接色 (默认值，会被 config.json 覆盖) */
   --bulma-primary-h: 171;
   --bulma-primary-s: 100%;
   --bulma-primary-l: 41%;
@@ -25,8 +25,13 @@
 
 body {
   background-color: var(--bg-body);
+  transition: background-color .25s ease, color .25s ease;
 }
 
+/* 深色模式下的全局微调 */
+[data-theme="dark"] {
+  --bg-body: var(--bg-dark);
+}
 [data-theme="dark"] body {
   background-color: var(--bg-dark);
 }
@@ -265,10 +270,8 @@ body {
 #toc-list .toc-h3 { padding-left: 2rem; font-size: 0.8rem; }
 
 /* 4.2 正文排版 (Content) */
-/* 隐藏正文里与头部重复的一级标题 */
 #post-body > h1:first-child { display: none !important; }
 
-/* 行内代码 */
 :not(pre) > code {
   background-color: rgba(175, 184, 193, 0.2) !important;
   color: #eb5757 !important;
@@ -282,7 +285,6 @@ body {
   color: #ff7b72 !important;
 }
 
-/* 终极代码块容器 */
 .code-wrapper {
   background-color: var(--bulma-scheme-main-bis);
   border: 1px solid var(--bulma-border-weak);
@@ -296,7 +298,6 @@ body {
   border-color: var(--border-dark);
 }
 
-/* 代码块头部栏 */
 .code-header {
   display: flex;
   justify-content: space-between;
@@ -311,7 +312,6 @@ body {
   border-bottom-color: var(--border-dark);
 }
 
-/* 语言标识 */
 .code-lang {
   font-size: 0.75rem;
   font-family: var(--bulma-family-code);
@@ -320,7 +320,6 @@ body {
   letter-spacing: 0.5px;
 }
 
-/* 复制按钮 */
 .copy-btn {
   color: var(--bulma-text-light) !important;
   transition: all 0.2s ease !important;
@@ -339,7 +338,6 @@ body {
   color: var(--bulma-primary) !important;
 }
 
-/* 重写 pre 标签，去除内部多余样式 */
 .code-wrapper pre {
   margin: 0 !important;
   padding: 1rem 1.2rem !important;
@@ -356,38 +354,23 @@ body {
   line-height: 1.6 !important;
 }
 
-/* 滚动条美化 */
 .code-wrapper pre::-webkit-scrollbar { height: 8px; width: 8px; }
 .code-wrapper pre::-webkit-scrollbar-track { background: transparent; }
-.code-wrapper pre::-webkit-scrollbar-thumb {
-  background-color: rgba(150, 150, 150, 0.3);
-  border-radius: 4px;
-}
+.code-wrapper pre::-webkit-scrollbar-thumb { background-color: rgba(150, 150, 150, 0.3); border-radius: 4px; }
 .code-wrapper pre::-webkit-scrollbar-thumb:hover { background-color: rgba(150, 150, 150, 0.6); }
-
-[data-theme="dark"] .code-wrapper pre::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.2);
-}
-[data-theme="dark"] .code-wrapper pre::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(255, 255, 255, 0.4);
-}
+[data-theme="dark"] .code-wrapper pre::-webkit-scrollbar-thumb { background-color: rgba(255, 255, 255, 0.2); }
+[data-theme="dark"] .code-wrapper pre::-webkit-scrollbar-thumb:hover { background-color: rgba(255, 255, 255, 0.4); }
 
 /* --------------------------------------------------------------------------
    5. 独立页面 (Pages)
    -------------------------------------------------------------------------- */
-/* 5.1 首页 Hero (Hero Section) */
+/* 5.1 首页 Hero */
 [data-theme="dark"] .hero.is-light {
   background-color: var(--bg-dark) !important;
   border-bottom: 1px solid var(--border-dark);
 }
-
-[data-theme="dark"] .hero.is-light .title {
-  color: var(--bulma-text-strong) !important;
-}
-
-[data-theme="dark"] .hero.is-light .subtitle {
-  color: var(--text-dark-muted) !important;
-}
+[data-theme="dark"] .hero.is-light .title { color: var(--bulma-text-strong) !important; }
+[data-theme="dark"] .hero.is-light .subtitle { color: var(--text-dark-muted) !important; }
 
 /* 5.2 关于页 (About) */
 .about-card {
@@ -413,7 +396,6 @@ body {
 }
 
 .about-avatar:hover { transform: scale(1.05); }
-
 .about-content-text { padding-left: 2rem; padding-right: 2rem; }
 .about-content-text p { font-size: 1.1rem; line-height: 1.8; color: var(--bulma-text); }
 [data-theme="dark"] .about-content-text p { color: #ccc; }
@@ -445,9 +427,8 @@ body {
 }
 
 /* --------------------------------------------------------------------------
-   6. 全局辅助组件 (Global Helpers)
+   6. 全局辅助与主题面板 (Global Helpers & Theme Panel)
    -------------------------------------------------------------------------- */
-/* 回到顶部按钮 */
 #back-to-top {
   position: fixed;
   bottom: 2rem;
@@ -458,10 +439,8 @@ body {
   transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
   transform: translateY(10px);
 }
-
 #back-to-top.is-visible { opacity: 1; visibility: visible; transform: translateY(0); }
 
-/* 阅读进度条 */
 #reading-progress {
   position: fixed;
   top: 3.25rem;
@@ -473,27 +452,131 @@ body {
   transition: width 0.1s ease-out;
 }
 
-/* 深色模式标题亮度控制 */
-[data-theme="dark"] .title,
-[data-theme="dark"] h1,
-[data-theme="dark"] h2,
-[data-theme="dark"] h3,
-[data-theme="dark"] h4,
-[data-theme="dark"] h5,
-[data-theme="dark"] h6 {
-  color: #d1d5db !important;
+[data-theme="dark"] #post-header .title { color: #e5e7eb !important; }
+[data-theme="dark"] .title a, [data-theme="dark"] h1 a, [data-theme="dark"] h2 a { color: inherit; }
+
+/* ================= 主题选择器面板样式 ================= */
+
+/* 面板容器 */
+#theme-panel {
+  position: fixed;
+  left: 1.25rem;
+  bottom: 5rem;
+  z-index: 998;
+  background: var(--bulma-scheme-main);
+  border: 1px solid var(--bulma-border-weak);
+  border-radius: var(--bulma-radius-large);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
+  padding: 1rem;
+  width: 260px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all .2s ease;
+}
+[data-theme="dark"] #theme-panel {
+  background: var(--bg-dark-card);
+  border-color: var(--border-dark);
+}
+#theme-panel.is-open { opacity: 1; visibility: visible; transform: translateY(0); }
+#theme-panel .panel-title {
+  font-size: .75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--bulma-text-light);
+  margin-bottom: .5rem;
+}
+#theme-panel .panel-divider { height: 1px; background: var(--bulma-border-weak); margin: .75rem 0; }
+
+/* 浮动按钮 */
+#theme-fab {
+  position: fixed;
+  left: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 999;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  color: var(--bulma-primary-invert);
+  background: var(--bulma-primary);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+#theme-fab:hover { transform: translateY(-2px) scale(1.05); box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25); }
+#theme-fab:active { transform: scale(0.97); }
+
+/* 模式按钮 */
+.mode-row { display: flex; gap: .5rem; }
+.mode-btn {
+  flex: 1;
+  padding: .55rem 0;
+  border-radius: var(--bulma-radius);
+  border: 1px solid var(--bulma-border-weak);
+  background: var(--bulma-scheme-main-bis);
+  color: var(--bulma-text);
+  cursor: pointer;
+  font-size: .8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .35rem;
+  transition: all .15s ease;
+}
+.mode-btn:hover { border-color: var(--bulma-primary); color: var(--bulma-primary); }
+[data-theme="dark"] .mode-btn { background: var(--bg-dark-card-hover); border-color: var(--border-dark); color: #ccc; }
+
+/* 选中状态强效覆盖 */
+#theme-panel .mode-btn.is-active {
+  background-color: var(--bulma-primary) !important;
+  color: var(--bulma-primary-invert) !important;
+  border: 2px solid var(--bulma-primary) !important;
+  font-weight: 700 !important;
 }
 
-[data-theme="dark"] #post-header .title {
-  color: #e5e7eb !important;
+/* 配色按钮 */
+.palette-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; }
+.palette-btn {
+  height: 2.6rem;
+  border-radius: var(--bulma-radius);
+  border: 2px solid transparent;
+  cursor: pointer;
+  position: relative;
+  transition: all .15s ease;
+}
+.palette-btn:hover { transform: translateY(-2px); }
+
+/* 选中状态强效覆盖 */
+#theme-panel .palette-btn.is-active {
+  border: 3px solid #ffffff !important;
+  box-shadow: 0 0 0 2px #000000, 0 0 10px rgba(0,0,0,0.5) !important;
+  transform: scale(1.05) !important;
+  z-index: 1;
 }
 
-[data-theme="dark"] .title a,
-[data-theme="dark"] h1 a,
-[data-theme="dark"] h2 a {
-  color: inherit;
+.palette-btn::after {
+  content: attr(data-label);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .7rem;
+  font-weight: 600;
+  color: rgba(0,0,0,.65);
+  text-shadow: 0 1px 0 rgba(255,255,255,.4);
 }
-/* ===== Theme Switcher 兼容微调 ===== */
-/* 使用 data-palette 覆盖主色时，避免 --bulma-primary-h 的原有 :root 硬覆盖 */
-:root { transition: background-color .25s ease, color .25s ease; }
-body { transition: background-color .25s ease; }
+[data-theme="dark"] .palette-btn::after { color: rgba(255,255,255,.85); text-shadow: 0 1px 0 rgba(0,0,0,.4); }
+
+/* 六种预览色块 */
+.palette-btn[data-palette="default"] { background: linear-gradient(135deg,#00d1b2,#42b883); }
+.palette-btn[data-palette="forest"]  { background: linear-gradient(135deg,#3f8f5c,#a3d977); }
+.palette-btn[data-palette="sakura"]  { background: linear-gradient(135deg,#f78fb3,#ffd1dc); }
+.palette-btn[data-palette="ocean"]   { background: linear-gradient(135deg,#2196f3,#4fc3f7); }
+.palette-btn[data-palette="sunset"]  { background: linear-gradient(135deg,#ff7043,#ffb74d); }
+.palette-btn[data-palette="mono"]    { background: linear-gradient(135deg,#4b5563,#d1d5db); }

@@ -9,35 +9,50 @@
     { id: "sunset",  label: "落日" },
     { id: "mono",    label: "极简" },
   ];
+  const EFFECTS = [
+    { id: "none",   label: "关闭", icon: "fa-ban" },
+    { id: "star",   label: "星空", icon: "fa-star" },
+    { id: "heart",  label: "爱心", icon: "fa-heart" },
+    { id: "flower", label: "花朵", icon: "fa-fan" },
+  ];
   
   const KEY_MODE = "theme";
   const KEY_PALETTE = "palette";
+  const KEY_EFFECT = "effect";
+  const KEY_OPACITY = "effect_opacity";
   const html = document.documentElement;
 
   const currentMode = () => (html.getAttribute("data-theme") === "dark" ? "dark" : "light");
   const currentPalette = () => html.getAttribute("data-palette") || "default";
+  const currentEffect = () => localStorage.getItem(KEY_EFFECT) || "flower";
+  const currentOpacity = () => localStorage.getItem(KEY_OPACITY) || "0.6";
 
   const syncUI = () => {
     const mode = currentMode();
     const palette = currentPalette();
+    const effect = currentEffect();
     
     document.querySelectorAll("#theme-panel .mode-btn").forEach(b => {
-      if (b.dataset.mode === mode) b.classList.add("is-active");
-      else b.classList.remove("is-active");
+      b.classList.toggle("is-active", b.dataset.mode === mode);
+    });
+    document.querySelectorAll("#theme-panel .palette-btn").forEach(b => {
+      b.classList.toggle("is-active", b.dataset.palette === palette);
+    });
+    document.querySelectorAll("#theme-panel .effect-btn").forEach(b => {
+      b.classList.toggle("is-active", b.dataset.effect === effect);
     });
 
-    document.querySelectorAll("#theme-panel .palette-btn").forEach(b => {
-      if (b.dataset.palette === palette) b.classList.add("is-active");
-      else b.classList.remove("is-active");
-    });
+    const slider = document.getElementById("effect-opacity");
+    if (slider) slider.value = currentOpacity();
   };
 
   const buildPanel = () => {
     if (document.getElementById("theme-fab")) return;
 
-    // 注意：这里必须使用 currentMode() 去动态生成初始类名，防止首屏错位
     const mode = currentMode();
     const palette = currentPalette();
+    const effect = currentEffect();
+    const opacity = currentOpacity();
 
     const modeHtml = MODES.map(m => `
       <button class="mode-btn ${m === mode ? "is-active" : ""}" data-mode="${m}">
@@ -49,6 +64,11 @@
       <button class="palette-btn ${p.id === palette ? "is-active" : ""}"
               data-palette="${p.id}" data-label="${p.label}" title="${p.label}"></button>`).join("");
 
+    const effectHtml = EFFECTS.map(e => `
+      <button class="effect-btn ${e.id === effect ? "is-active" : ""}" data-effect="${e.id}" title="${e.label}">
+        <i class="fas ${e.icon}"></i>
+      </button>`).join("");
+
     document.body.insertAdjacentHTML("beforeend", `
       <button id="theme-fab" title="切换主题" aria-label="切换主题">
         <i class="fas fa-palette"></i>
@@ -59,6 +79,13 @@
         <div class="panel-divider"></div>
         <p class="panel-title">配色方案</p>
         <div class="palette-grid">${paletteHtml}</div>
+        <div class="panel-divider"></div>
+        <p class="panel-title">页面特效</p>
+        <div class="effect-grid">${effectHtml}</div>
+        <div class="opacity-row">
+          <span>透明度</span>
+          <input type="range" id="effect-opacity" min="0" max="1" step="0.1" value="${opacity}">
+        </div>
       </div>
     `);
 
@@ -76,7 +103,6 @@
       if (e.key === "Escape") panel.classList.remove("is-open");
     });
 
-    // 核心修改：加入 setTimeout 保证状态应用后再重绘UI
     panel.addEventListener("click", (e) => {
       const modeBtn = e.target.closest(".mode-btn");
       if (modeBtn) {
@@ -85,13 +111,24 @@
         setTimeout(syncUI, 0); 
         return;
       }
-      
       const palBtn = e.target.closest(".palette-btn");
       if (palBtn) {
         localStorage.setItem(KEY_PALETTE, palBtn.dataset.palette);
         window.__applyTheme();
         setTimeout(syncUI, 0); 
+        return;
       }
+      const effBtn = e.target.closest(".effect-btn");
+      if (effBtn) {
+        if (window.__setEffect) window.__setEffect(effBtn.dataset.effect);
+        setTimeout(syncUI, 0);
+      }
+    });
+
+    // 监听滑块拖动
+    const slider = document.getElementById("effect-opacity");
+    slider.addEventListener("input", (e) => {
+      if (window.__setEffectOpacity) window.__setEffectOpacity(e.target.value);
     });
   };
 

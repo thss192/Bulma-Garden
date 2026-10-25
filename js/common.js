@@ -15,12 +15,12 @@ async function loadConfig() {
 
 // ================= 核心主题控制逻辑 =================
 // 挂载到 window 以便 theme.js 调用
-window.__applyTheme = function(customConfig) {
+window.__applyTheme = function() {
   const html = document.documentElement;
   const KEY_MODE = "theme";
   const KEY_PALETTE = "palette";
 
-  // 1. 确定当前模式 (读取本地存储，如果没有则看系统偏好)
+  // 1. 处理深浅模式
   const savedMode = localStorage.getItem(KEY_MODE);
   const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
   const mode = savedMode || (prefersDark ? "dark" : "light");
@@ -32,42 +32,30 @@ window.__applyTheme = function(customConfig) {
   const hljs = document.getElementById("hljs-theme");
   if (hljs) hljs.href = mode === "dark" ? "libs/github-dark.min.css" : "libs/github.min.css";
 
-  // 2. 确定当前配色
+  // 2. 处理配色方案（完全绕开 CSS 类名，直接用 JS 注入最高优先级的行内变量）
   const palette = localStorage.getItem(KEY_PALETTE) || "default";
-  if (palette === "default") html.removeAttribute("data-palette");
-  else html.setAttribute("data-palette", palette);
+  html.setAttribute("data-palette", palette === "default" ? "" : palette);
 
-  // 3. 重置行内 CSS 变量
-  ["primary-h","primary-s","primary-l","link-h","link-s","link-l"].forEach(k =>
-    html.style.removeProperty("--bulma-" + k)
-  );
+  // 定义所有颜色的 HSL 值
+  const colorMap = {
+    "default": { h: 171, s: 100, l: 41 }, // 薄荷
+    "forest":  { h: 145, s: 63,  l: 42 }, // 森林
+    "sakura":  { h: 340, s: 82,  l: 62 }, // 樱花
+    "ocean":   { h: 200, s: 90,  l: 48 }, // 海洋
+    "sunset":  { h: 25,  s: 95,  l: 55 }, // 落日
+    "mono":    { h: 220, s: 10,  l: 45 }  // 极简
+  };
 
-  // 4. 应用具体的颜色值
-  if (palette === "mono") {
-    // 极简模式：手动写死灰阶
-    html.style.setProperty("--bulma-primary-h", "220");
-    html.style.setProperty("--bulma-primary-s", "10%");
-    html.style.setProperty("--bulma-primary-l", "45%");
-    html.style.setProperty("--bulma-link-h", "220");
-    html.style.setProperty("--bulma-link-s", "10%");
-    html.style.setProperty("--bulma-link-l", "45%");
-  } else {
-    // 其他模式：以 config 为基准 (config 会被 custom-themes.css 中的 [data-palette] 覆盖)
-    const cfg = customConfig || window.__CONFIG__;
-    if (cfg && cfg.theme) {
-      const t = cfg.theme;
-      if (t.primary) {
-        html.style.setProperty("--bulma-primary-h", t.primary.h);
-        html.style.setProperty("--bulma-primary-s", t.primary.s + "%");
-        html.style.setProperty("--bulma-primary-l", t.primary.l + "%");
-      }
-      if (t.link) {
-        html.style.setProperty("--bulma-link-h", t.link.h);
-        html.style.setProperty("--bulma-link-s", t.link.s + "%");
-        html.style.setProperty("--bulma-link-l", t.link.l + "%");
-      }
-    }
-  }
+  const target = colorMap[palette] || colorMap["default"];
+
+  // 强行覆盖行内样式（这是最高优先级，任何 CSS 都覆盖不掉）
+  html.style.setProperty("--bulma-primary-h", target.h);
+  html.style.setProperty("--bulma-primary-s", target.s + "%");
+  html.style.setProperty("--bulma-primary-l", target.l + "%");
+  
+  html.style.setProperty("--bulma-link-h", target.h);
+  html.style.setProperty("--bulma-link-s", target.s + "%");
+  html.style.setProperty("--bulma-link-l", target.l + "%");
 };
 
 // ================= 全文搜索模态框 =================
@@ -256,8 +244,8 @@ function initBackToTop() {
 async function initLayout(page) {
   const config = await loadConfig();
   
-  // 应用主题（使用最新的全局函数）
-  window.__applyTheme(config.theme);
+  // 应用主题
+  window.__applyTheme();
 
   renderNavbar(config, page);
   renderFooter(config);
