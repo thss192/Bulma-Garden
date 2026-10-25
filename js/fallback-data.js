@@ -100,8 +100,7 @@ window.__CONFIG__ = {
     "publishedText": "发布于 {date} · 作者保留所有权利，转载请注明出处。",
     "copyLink": "复制本文链接"
   }
-};
-// 2. 文章列表兜底
+};// 2. 文章列表兜底
 window.__POSTS_FALLBACK__ = [
   {
     "slug": "bulma-01",
