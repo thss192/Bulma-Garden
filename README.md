@@ -1,4 +1,4 @@
-# 🌱 Bulma-Garden
+﻿# 🌱 Bulma-Garden
 
 ![Bulma](https://img.shields.io/badge/Bulma-1.0.2-00d1b2?style=flat-square&logo=bulma)
 ![Vanilla JS](https://img.shields.io/badge/Vanilla_JS-ES6+-f7df1e?style=flat-square&logo=javascript)
@@ -9,14 +9,14 @@
 
 ## ✨ 特性 (Features)
 
+* **多主题与多配色**：支持亮暗模式切换，内置 **6 套精选配色**（薄荷、森林、樱花、海洋、落日、极简），记忆用户选择，毫无冲突。
+* **动态粒子特效**：左下角面板可切换**星空、爱心、花朵**等背景飘落特效，支持点击爆炸扩散（已深度性能优化，完全不卡顿），并支持**透明度实时调节**。
+* **动态首页**：Hero 标题支持**打字机逐字渲染**（完美支持 Emoji），侧边栏集成**时间感知问候**（早上好/夜深了）。
 * **极简架构**：HTML + CSS + 原生 JS，零依赖，拒绝臃肿。
-* **数据与视图彻底分离**：全站所有文案、标题、项目、友链均由 `config.json` 或独立 JSON 文件驱动，HTML 仅作骨架。
-* **双通道数据源**：内置 `fallback-data.js` 兜底机制，完美兼顾“本地双击预览”与“服务器真实渲染”两种场景。
-* **系列教程管理**：支持按 `series` 分组，内置手风琴折叠与系列独立分页。
-* **灵活排序**：支持基于时间（正序/倒序）或自定义 ID（`order`）排序。
-* **深色模式**：完美适配系统偏好，支持手动一键切换并记忆至 `localStorage`。
+* **数据与视图分离**：全站文案、项目、友链、功能开关均由 `config.json` 等 JSON 文件驱动。
+* **通用化组件**：利用 Web Components 封装了 `<code-block>`，样式完全隔离，方便代码复用。
+* **沉浸式阅读**：自动生成目录（TOC）、阅读进度条、阅读时长估算、图片点击放大（Lightbox）。
 * **全文搜索**：基于 JSON 索引的本地全文搜索，支持 `Ctrl+K` 快速唤起。
-* **沉浸式阅读**：自动生成目录（TOC）、阅读进度条、阅读时长估算、图片点击放大（Lightbox）、代码一键复制。
 
 ## 📂 目录结构
 
@@ -28,17 +28,20 @@ my-blog/
 ├── projects.html              # 项目页
 ├── links.html                 # 友链页
 ├── 404.html                   # 404 错误页
-├── config.json                # 站点全局配置（标题、作者、导航、全站文案等）
-├── projects.json              # 项目数据（含图标配置）
+├── config.json                # 站点全局配置（标题、作者、功能开关、全站文案等）
+├── projects.json              # 项目数据
 ├── links.json                 # 友链数据
 ├── rss.xml                    # 自动生成的 RSS 订阅
-├── custom.css                 # 唯一自定义 CSS（主题色、深色模式微调）
+├── custom.css                 # 核心自定义样式（全局、深浅模式组件微调）
+├── custom-themes.css          # 主题配色面板与主题变量、特效面板样式
 ├── dev.js                     # 本地数据监听同步脚本
 ├── js/
-│   ├── fallback-data.js       # 本地双击预览时的兜底数据（由脚本生成）
-│   ├── common.js              # 公共逻辑（导航、主题、搜索、回顶部、404文案）
-│   ├── home.js                # 首页逻辑（Hero、侧边栏、文章列表）
-│   ├── post.js                # 详情页逻辑（Markdown解析、TOC、许可协议）
+│   ├── fallback-data.js       # 本地双击预览时的兜底数据
+│   ├── common.js              # 公共逻辑（导航、主题状态应用、搜索模态框）
+│   ├── theme.js               # 左下角调色盘与特效面板交互
+│   ├── effects.js             # 高性能粒子特效引擎 (Canvas)
+│   ├── home.js                # 首页逻辑（打字机、动态问候、文章列表）
+│   ├── post.js                # 详情页逻辑（Markdown解析、CodeBlock组件、TOC）
 │   ├── about.js               # 关于页逻辑
 │   ├── projects.js            # 项目页逻辑
 │   └── links.js               # 友链页逻辑
@@ -55,31 +58,21 @@ my-blog/
 
 ### 推荐开发方式：VSCode + 自动同步（丝滑体验）
 
-强烈推荐使用 **VSCode** 进行本地开发，配合自带的热更新插件，体验最接近现代前端框架：
-
 1. **启动数据监听**：在 VSCode 终端运行 `node dev.js`。它会监听 `config.json`、`posts/` 等文件的改动，一旦保存，立刻自动执行 `generate-index.js` 更新数据。
-2. **启动本地服务器**：安装 VSCode 插件 **Live Server**，右键 `index.html` -> `Open with Live Server`（或者使用 Live Preview 插件）。
-3. **开始写作/调试**：修改配置或保存 Markdown 文件，浏览器会自动刷新，所见即所得，彻底告别“忘记跑脚本”的烦恼。
+2. **启动本地服务器**：安装 VSCode 插件 **Live Server**，右键 `index.html` -> `Open with Live Server`。
+3. **开始写作/调试**：修改配置或保存 Markdown 文件，浏览器会自动刷新，所见即所得。
 
-### 方式二：一键启动本地服务器（适合不想用 VSCode 插件）
+### 方式二：一键启动本地服务器
 
-根目录提供了一个 `start.bat`（仅限 Windows）：
 1. 确保没有其他程序占用 8000 端口。
 2. 双击 `start.bat`，它会自动启动内置的 `dev.js` 服务器并打开浏览器。
-3. 访问 `http://localhost:8000`，即可看到实时生效的页面。
+3. 访问 `http://localhost:8000`。
 
-### 方式三：直接双击本地文件（极简预览）
-
-直接双击打开 `index.html`。
-
-*(注：由于浏览器 `file://` 安全限制，页面会自动加载 `fallback-data.js` 中的兜底数据，因此文章列表、项目、友链均能正常展示，但**文章详情页无法读取本地 .md 文件**。修改内容后需要手动跑一遍 `node scripts/generate-index.js` 才能同步。)*
-
-## 📝 写作与数据更新指南
+## 📝 写作与配置指南
 
 ### 1. 新增一篇文章
 
-1. 在 `posts/` 目录下新建 Markdown 文件，文件名即 URL 的 slug（如 `css-flexbox.md`）。
-2. 文件头部必须包含规范的 Front-matter：
+在 `posts/` 目录下新建 Markdown 文件（如 `css-flexbox.md`），文件头部必须包含规范的 Front-matter：
 
 ~~~markdown
 ---
@@ -95,42 +88,22 @@ summary: 一句话摘要，用于列表页展示。
 这里是正文内容...
 ~~~
 
-3. 运行脚本更新文章索引与兜底数据（如果你开了 `node dev.js`，保存后会自动更新，无需手动）：
-
-~~~bash
-node scripts/generate-index.js
-~~~
+保存后，运行 `node scripts/generate-index.js` 或在 `dev.js` 监听下自动更新数据。
 
 ### 2. 修改站点配置 (config.json)
 
-打开 `config.json`，你可以修改以下内容：
-
 * `siteTitle` / `siteSubtitle` / `siteUrl`：站点基本信息
 * `author`：作者信息（姓名、头像、简介、邮箱、起始年份、技能标签、关于页长文）
-* `hero`：首页首屏的标题与副标题
-* `pageCopy`：各页面的文案（如项目页标题、友链页标题与提示语、404页面文案等）
+* `features`：**功能开关** (例如 `"effects": true`, `"search": true`, `"backToTop": true`)。你可以自由关闭不需要的模块。
+* `hero`：首页首屏的标题与副标题（打字机效果的数据来源）
+* `pageCopy`：各页面的文案
 * `postLicense`：文章底部的版权许可协议文案
-* `nav` / `social`：导航菜单与社交链接
-* `theme`：主题色 HSL 值
-* `defaultSort`：全局默认排序方式（`"asc"` / `"desc"` / `"order"`）
+* `theme`：主题色 HSL 默认值
 
-### 3. 修改项目 / 友链
+### 3. 个性化你的视觉
 
-* **项目**：编辑 `projects.json`，在数组中添加对象。支持 `icon` 字段（FontAwesome 类名，如 `fa-rocket`，不填则默认 `fa-cube`）。
-* **友链**：编辑 `links.json`，在数组中添加对象。
-
-## 🛠️ 脚本用法补充
-
-~~~bash
-# 生成清单（会写入 index.json、search-index.json、fallback-data.js）
-node scripts/generate-index.js
-
-# 只解析不写入，用于验证解析结果对不对（不会改动任何文件）
-node scripts/generate-index.js --dry-run
-
-# 生成 RSS 订阅文件（需在 config.json 中配置正确的 siteUrl）
-node scripts/generate-rss.js
-~~~
+* 直接点击页面左下角的 🎨 按钮，可以自由切换**亮暗模式**、**6 种配色**以及**粒子特效**。
+* 所有的偏好设置都会自动保存在本地 `localStorage` 中，下次访问依然生效。
 
 ## 🌐 部署到 GitHub Pages
 
@@ -143,21 +116,16 @@ node scripts/generate-rss.js
 
 ## 🐛 已知问题与路线图
 
-### 已修复
-- [x] `post.js` 缺失 `loadPostIndex` 导致上下篇静默不显示
-- [x] `generate-index.js` 不同步 `fallback-data.js`
-- [x] `config.json` 的 `defaultSort` 对首页排序不生效
-- [x] `404.html` 未引 `fallback-data.js` 导致导航栏为空
-- [x] `generate-rss.js` 的 `SITE_URL` 硬编码
-- [x] `config.json` 带 BOM 导致 `JSON.parse` 失败
-- [x] 完成数据与 HTML 彻底分离，所有文案由 config 驱动
-- [x] 修复本地双击白屏问题，完善 fetch 异常降级
-- [x] 新增 `dev.js` 自动监听同步与 Live Server 工作流
+### 已修复与新增
+- [x] 粒子特效引擎重构（移除高耗能阴影，增加内存限制与 RGB 缓存，大幅提升渲染性能）
+- [x] 主题状态冲突修复（完全解耦状态管理，确保选中态即时响应）
+- [x] 防闪烁处理（Anti-FOUC 脚本注入）
+- [x] 通用化功能开关（在 config.json 中通过 features 节点关闭特定模块）
+- [x] 通用化代码块组件 `<code-block>`
+- [x] 动态首页效果（打字机与时间段问候）
 
 ### 待处理
 - [ ] `search-index.json` 在 `file://` 下无法加载，搜索只能依赖示例兜底数据
-- [ ] 详情页在 `file://` 下无法读取 `.md`，需起本地服务器
-- [ ] 缺少单元测试（front-matter 解析、清单生成）
 - [ ] 渲染 Markdown 时未做 XSS 防护（`marked.parse` 结果直接 `innerHTML`）
 
 ## 📄 许可协议
