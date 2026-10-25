@@ -33,6 +33,7 @@ my-blog/
 ├── links.json                 # 友链数据
 ├── rss.xml                    # 自动生成的 RSS 订阅
 ├── custom.css                 # 唯一自定义 CSS（主题色、深色模式微调）
+├── dev.js                     # 本地数据监听同步脚本
 ├── js/
 │   ├── fallback-data.js       # 本地双击预览时的兜底数据（由脚本生成）
 │   ├── common.js              # 公共逻辑（导航、主题、搜索、回顶部、404文案）
@@ -50,27 +51,28 @@ my-blog/
     └── generate-rss.js        # 生成 RSS 订阅文件
 ~~~
 
-## 🚀 快速开始
+## 🚀 快速开始与开发指南
 
-### 方式一：本地直接预览
+### 推荐开发方式：VSCode + 自动同步（丝滑体验）
+
+强烈推荐使用 **VSCode** 进行本地开发，配合自带的热更新插件，体验最接近现代前端框架：
+
+1. **启动数据监听**：在 VSCode 终端运行 `node dev.js`。它会监听 `config.json`、`posts/` 等文件的改动，一旦保存，立刻自动执行 `generate-index.js` 更新数据。
+2. **启动本地服务器**：安装 VSCode 插件 **Live Server**，右键 `index.html` -> `Open with Live Server`（或者使用 Live Preview 插件）。
+3. **开始写作/调试**：修改配置或保存 Markdown 文件，浏览器会自动刷新，所见即所得，彻底告别“忘记跑脚本”的烦恼。
+
+### 方式二：一键启动本地服务器（适合不想用 VSCode 插件）
+
+根目录提供了一个 `start.bat`（仅限 Windows）：
+1. 确保没有其他程序占用 8000 端口。
+2. 双击 `start.bat`，它会自动启动内置的 `dev.js` 服务器并打开浏览器。
+3. 访问 `http://localhost:8000`，即可看到实时生效的页面。
+
+### 方式三：直接双击本地文件（极简预览）
 
 直接双击打开 `index.html`。
 
-*(注：由于浏览器 `file://` 安全限制，页面会自动加载 `fallback-data.js` 中的兜底数据，因此文章列表、项目、友链均能正常展示，但**文章详情页无法读取本地 .md 文件**。)*
-
-### 方式二：本地服务器运行（完整功能体验）
-
-在项目目录下运行以下命令启动本地服务器：
-
-~~~bash
-# 如果安装了 Python
-python -m http.server 8000
-
-# 或者使用 Node.js
-npx serve .
-~~~
-
-然后访问 `http://localhost:8000`，体验完整的 Markdown 渲染与全文搜索。
+*(注：由于浏览器 `file://` 安全限制，页面会自动加载 `fallback-data.js` 中的兜底数据，因此文章列表、项目、友链均能正常展示，但**文章详情页无法读取本地 .md 文件**。修改内容后需要手动跑一遍 `node scripts/generate-index.js` 才能同步。)*
 
 ## 📝 写作与数据更新指南
 
@@ -93,26 +95,24 @@ summary: 一句话摘要，用于列表页展示。
 这里是正文内容...
 ~~~
 
-3. 运行脚本更新文章索引与兜底数据：
+3. 运行脚本更新文章索引与兜底数据（如果你开了 `node dev.js`，保存后会自动更新，无需手动）：
 
 ~~~bash
 node scripts/generate-index.js
 ~~~
 
-*(该脚本会自动更新 `posts/index.json`、`posts/search-index.json` 以及 `js/fallback-data.js` 中的 `__POSTS_FALLBACK__` 和 `__CONFIG__`)*
-
 ### 2. 修改站点配置 (config.json)
 
-打开 `config.json`，你可以修改以下内容（修改后**必须**运行 `node scripts/generate-index.js` 才能在双击预览时生效，起服务器则无需运行）：
+打开 `config.json`，你可以修改以下内容：
 
 * `siteTitle` / `siteSubtitle` / `siteUrl`：站点基本信息
-* `author`：作者信息（姓名、头像、简介、邮箱、**起始年份(startYear)**、**技能标签(skills)**、**关于页长文(about)**）
-* `hero`：**首页首屏的标题与副标题**
-* `pageCopy`：**各页面的文案**（如项目页标题、友链页标题与提示语、404页面文案等）
-* `postLicense`：**文章底部的版权许可协议文案**
+* `author`：作者信息（姓名、头像、简介、邮箱、起始年份、技能标签、关于页长文）
+* `hero`：首页首屏的标题与副标题
+* `pageCopy`：各页面的文案（如项目页标题、友链页标题与提示语、404页面文案等）
+* `postLicense`：文章底部的版权许可协议文案
 * `nav` / `social`：导航菜单与社交链接
 * `theme`：主题色 HSL 值
-* `defaultSort`：全局默认排序方式（`"asc"` 时间正序 / `"desc"` 时间倒序 / `"order"` 自定义 ID）
+* `defaultSort`：全局默认排序方式（`"asc"` / `"desc"` / `"order"`）
 
 ### 3. 修改项目 / 友链
 
@@ -150,8 +150,9 @@ node scripts/generate-rss.js
 - [x] `404.html` 未引 `fallback-data.js` 导致导航栏为空
 - [x] `generate-rss.js` 的 `SITE_URL` 硬编码
 - [x] `config.json` 带 BOM 导致 `JSON.parse` 失败
-- [x] **完成数据与 HTML 彻底分离，所有文案由 config 驱动**
-- [x] **修复本地双击白屏问题，完善 fetch 异常降级**
+- [x] 完成数据与 HTML 彻底分离，所有文案由 config 驱动
+- [x] 修复本地双击白屏问题，完善 fetch 异常降级
+- [x] 新增 `dev.js` 自动监听同步与 Live Server 工作流
 
 ### 待处理
 - [ ] `search-index.json` 在 `file://` 下无法加载，搜索只能依赖示例兜底数据
