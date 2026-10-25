@@ -8,7 +8,8 @@
   <link rel="stylesheet" href="libs/fontawesome/css/all.min.css" />
   <link rel="stylesheet" href="custom.css" />
   <link rel="stylesheet" href="custom-themes.css" />
-  <!-- Anti-FOUC: 防止页面刷新时主题闪烁 -->
+
+  <!-- 防闪烁脚本 -->
   <script>
     (function() {
       var mode = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
@@ -21,26 +22,28 @@
 <body>
   <div id="site-navbar"></div>
 
-  <section class="hero is-fullheight-with-navbar is-light">
+  <!-- 404 页面主体 -->
+  <section class="hero is-fullheight-with-navbar is-light" style="margin-top: 3.25rem;">
     <div class="hero-body">
       <div class="container has-text-centered">
-        <p id="error-code" class="title is-1 has-text-primary"></p>
-        <p id="error-title" class="subtitle is-3"></p>
-        <p id="error-desc" class="block"></p>
+        <!-- 这里设置了默认文字，即使 JS 失效也能显示 -->
+        <p id="error-code" class="title is-1 has-text-primary">404</p>
+        <p id="error-title" class="subtitle is-3">哎呀，页面走丢了...</p>
+        <p id="error-desc" class="block">你要找的页面可能被外星人抓走了，或者你输入了错误的地址。</p>
         <a href="index.html" class="button is-primary is-medium is-rounded mt-4">
           <span class="icon"><i class="fas fa-home"></i></span>
-          <span id="back-home-label"></span>
+          <span id="back-home-label">返回首页</span>
         </a>
       </div>
     </div>
   </section>
 
   <div id="site-footer"></div>
+
+  <!-- 脚本引入顺序：兜底数据 -> 特效 -> 主题交互 -> 公共逻辑 -->
   <script src="js/fallback-data.js"></script>
+  <script src="js/effects.js" defer></script>
+  <script src="js/theme.js" defer></script>
   <script src="js/common.js" defer></script>
-  <script src="js/effects.js" defer></script>`r`n  <script src="js/theme.js" defer></script>`r`n</body>
+</body>
 </html>
-
-
-
-

@@ -580,3 +580,8 @@ body {
 .palette-btn[data-palette="ocean"]   { background: linear-gradient(135deg,#2196f3,#4fc3f7); }
 .palette-btn[data-palette="sunset"]  { background: linear-gradient(135deg,#ff7043,#ffb74d); }
 .palette-btn[data-palette="mono"]    { background: linear-gradient(135deg,#4b5563,#d1d5db); }
+/* ================= 打字机光标动画 ================= */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
