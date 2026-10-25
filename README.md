@@ -192,3 +192,35 @@ node scripts/generate-index.js
 
 本项目基于 [MIT License](https://opensource.org/licenses/MIT) 开源。博客文章内容基于 [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) 许可。
 
+
+---
+
+## 🐛 已知问题与路线图
+
+### 已修复
+- [x] `post.js` 缺失 `loadPostIndex` 导致上下篇静默不显示
+- [x] `generate-index.js` 不同步 `fallback-data.js`
+- [x] `config.json` 的 `defaultSort` 对首页排序不生效
+- [x] `404.html` 未引 `fallback-data.js` 导致导航栏为空
+- [x] `generate-rss.js` 的 `SITE_URL` 硬编码
+- [x] `config.json` 带 BOM 导致 `JSON.parse` 失败
+
+### 待处理
+- [ ] `search-index.json` 在 `file://` 下无法加载，搜索只能依赖示例兜底数据
+- [ ] 详情页在 `file://` 下无法读取 `.md`，需起本地服务器
+- [ ] 缺少单元测试（front-matter 解析、清单生成）
+- [ ] 渲染 Markdown 时未做 XSS 防护（`marked.parse` 结果直接 `innerHTML`）
+- [ ] `links.json` / `projects.json` 手写时可能带 BOM，建议统一去 BOM 脚本
+
+### 脚本用法补充
+
+```bash
+# 生成清单（会写入 index.json、search-index.json、fallback-data.js）
+node scripts/generate-index.js
+
+# 只解析不写入，先确认解析结果对不对
+node scripts/generate-index.js --dry-run
+
+# 生成 RSS
+node scripts/generate-rss.js
+```
