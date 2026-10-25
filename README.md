@@ -1,9 +1,9 @@
 # 🌱 Bulma-Garden
 
-!\[Bulma](https://img.shields.io/badge/Bulma-1.0.2-00d1b2?style=flat-square\&logo=bulma)
-!\[Vanilla JS](https://img.shields.io/badge/Vanilla\_JS-ES6+-f7df1e?style=flat-square\&logo=javascript)
-!\[License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)
-!\[PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)
+![Bulma](https://img.shields.io/badge/Bulma-1.0.2-00d1b2?style=flat-square\&logo=bulma)
+![Vanilla JS](https://img.shields.io/badge/Vanilla\_JS-ES6+-f7df1e?style=flat-square\&logo=javascript)
+![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)
+![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)
 
 这是一个基于 **Bulma CSS** 和 **原生 JavaScript** 构建的纯静态个人博客系统。无需任何构建工具（Webpack/Vite/Nuxt），不需要数据库，双击即可运行，完美适配 GitHub Pages 等静态托管服务。
 
@@ -80,9 +80,9 @@ my-blog/
 
 └── scripts/
 
-\\\&#x20;   ├── generate-index.js      # 扫描 md 生成文章清单与搜索索引
+\\\\\\\&#x20;   ├── generate-index.js      # 扫描 md 生成文章清单与搜索索引
 
-\\\&#x20;   └── generate-rss.js        # 生成 RSS 订阅文件
+\\\\\\\&#x20;   └── generate-rss.js        # 生成 RSS 订阅文件
 
 ```
 
@@ -141,7 +141,7 @@ date: 2025-11-01
 
 order: 8 # 可选：用于自定义排序
 
-tags: \\\[前端, CSS, 布局]
+tags: \\\\\\\[前端, CSS, 布局]
 
 series: CSS 进阶之路 # 可选：系列名称
 
