@@ -28,55 +28,7 @@ function applyTheme(theme) {
   }
 }
 
-function initTheme() {
-  const html = document.documentElement;
-  const saved = localStorage.getItem("theme");
-  const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-  
-  const updateHighlightTheme = (isDark) => {
-    const hljsLink = document.getElementById("hljs-theme");
-    if (hljsLink) {
-      hljsLink.href = isDark 
-        ? "libs/github-dark.min.css"
-        : "libs/github.min.css";
-    }
-  };
-
-  if (saved === "dark" || (!saved && prefersDark)) {
-    html.setAttribute("data-theme", "dark");
-    updateHighlightTheme(true);
-  } else {
-    html.removeAttribute("data-theme");
-    updateHighlightTheme(false);
-  }
-
-  document.addEventListener("click", (e) => {
-    const btn = e.target.closest("#theme-toggle");
-    if (!btn) return;
-    
-    const isDark = html.getAttribute("data-theme") === "dark";
-    if (isDark) {
-      html.removeAttribute("data-theme");
-      localStorage.setItem("theme", "light");
-      updateHighlightTheme(false);
-      btn.innerHTML = `<span class="icon is-small"><i class="fas fa-moon"></i></span><span>暗色</span>`;
-    } else {
-      html.setAttribute("data-theme", "dark");
-      localStorage.setItem("theme", "dark");
-      updateHighlightTheme(true);
-      btn.innerHTML = `<span class="icon is-small"><i class="fas fa-sun"></i></span><span>亮色</span>`;
-    }
-  });
-
-  setTimeout(() => {
-    const btn = document.getElementById("theme-toggle");
-    if (btn) {
-      btn.innerHTML = html.getAttribute("data-theme") === "dark" 
-        ? `<span class="icon is-small"><i class="fas fa-sun"></i></span><span>亮色</span>` 
-        : `<span class="icon is-small"><i class="fas fa-moon"></i></span><span>暗色</span>`;
-    }
-  }, 100);
-}
+function initTheme() { /* 已由 js/theme.js 接管，无需操作 */ }
 
 // ================= 全文搜索模态框 =================
 function initSearchModal() {
@@ -217,9 +169,6 @@ function renderNavbar(config, page) {
                 <span class="icon"><i class="fas fa-search"></i></span>
               </button>
             </div>
-            <div class="navbar-item">
-              <button id="theme-toggle" class="button is-rounded is-small is-light" title="切换深浅色模式"></button>
-            </div>
           </div>
         </div>
       </div>
@@ -265,7 +214,6 @@ function initBackToTop() {
 }
 
 async function initLayout(page) {
-  initTheme();
   const config = await loadConfig();
   applyTheme(config.theme);
   renderNavbar(config, page);
@@ -286,3 +234,5 @@ async function initLayout(page) {
 }
 
 window.initLayout = initLayout;
+
+

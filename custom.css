@@ -493,3 +493,7 @@ body {
 [data-theme="dark"] h2 a {
   color: inherit;
 }
+/* ===== Theme Switcher 兼容微调 ===== */
+/* 使用 data-palette 覆盖主色时，避免 --bulma-primary-h 的原有 :root 硬覆盖 */
+:root { transition: background-color .25s ease, color .25s ease; }
+body { transition: background-color .25s ease; }
