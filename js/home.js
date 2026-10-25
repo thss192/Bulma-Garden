@@ -1,6 +1,7 @@
 ﻿// 首页：按系列分组，支持三种排序（时间正倒序、自定义ID），独立分页
 
-let ALL_POSTS = [];        
+let ALL_POSTS = [];
+let SITE_CONFIG = {};        
 let ACTIVE_TAG = "__all__"; 
 const SERIES_PAGES = {};
 const SERIES_SORTS = {}; 
@@ -152,7 +153,7 @@ function renderList() {
   let seriesIndex = 0;
   
   // 读取全局默认配置
-  const defaultSort = (window.__CONFIG__ && window.__CONFIG__.defaultSort) ? window.__CONFIG__.defaultSort : "desc";
+  const defaultSort = (SITE_CONFIG && SITE_CONFIG.defaultSort) ? SITE_CONFIG.defaultSort : "desc";
 
   for (const [seriesName, postsInSeries] of Object.entries(grouped)) {
     const containerId = `series-content-${seriesIndex}`;
@@ -252,6 +253,7 @@ function renderList() {
 
 async function initHome() {
   const config = await initLayout("index.html");
+  SITE_CONFIG = config || {};
   const statusEl = document.getElementById("post-status");
   
   const profileEl = document.getElementById("sidebar-profile");
