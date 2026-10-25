@@ -1,0 +1,10 @@
+{
+  "name": "my-blog",
+  "version": "1.0.0",
+  "description": "Bulma static blog",
+  "scripts": {
+    "dev": "node dev.js",
+    "build:index": "node scripts/generate-index.js",
+    "build:rss": "node scripts/generate-rss.js"
+  }
+}
