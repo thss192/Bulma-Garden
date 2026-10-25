@@ -218,11 +218,19 @@ function initReadingProgress() {
 function renderPostExtras(title, date) {
   const extrasEl = document.getElementById("post-footer-extras");
   if (!extrasEl) return;
+  const L = (window.__CONFIG__ && window.__CONFIG__.postLicense) || {};
+  const licName = L.name || "CC BY-NC-SA 4.0";
+  const licUrl = L.url || "https://creativecommons.org/licenses/by-nc-sa/4.0/";
+  const licLink = `<a href="${licUrl}" target="_blank" class="has-text-weight-bold">${licName}</a>`;
+  const licText = (L.text || "本文《{title}》采用 {name} 许可协议。").replace("{title}", title).replace("{name}", licLink);
+  const pubText = (L.publishedText || "发布于 {date} · 作者保留所有权利，转载请注明出处。").replace("{date}", date);
+  const copyLabel = L.copyLink || "复制本文链接";
+
   extrasEl.innerHTML = `
     <div class="has-text-centered mt-6 mb-6 pt-5 pb-5" style="border-top: 1px dashed var(--bulma-border-weak); border-bottom: 1px dashed var(--bulma-border-weak);">
-      <p class="is-size-7 has-text-grey mb-3"><i class="fas fa-copyright mr-1"></i> 本文《${title}》采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" class="has-text-weight-bold">CC BY-NC-SA 4.0</a> 许可协议。</p>
-      <p class="is-size-7 has-text-grey mb-4">发布于 ${date} · 作者保留所有权利，转载请注明出处。</p>
-      <button class="button is-small is-rounded is-light" onclick="navigator.clipboard.writeText(window.location.href).then(() => alert('链接已复制，快去分享吧！'))"><span class="icon is-small"><i class="fas fa-link"></i></span><span>复制本文链接</span></button>
+      <p class="is-size-7 has-text-grey mb-3"><i class="fas fa-copyright mr-1"></i> ${licText}</p>
+      <p class="is-size-7 has-text-grey mb-4">${pubText}</p>
+      <button class="button is-small is-rounded is-light" onclick="navigator.clipboard.writeText(window.location.href).then(() => alert('链接已复制，快去分享吧！'))"><span class="icon is-small"><i class="fas fa-link"></i></span><span>${copyLabel}</span></button>
     </div>
   `;
 }
