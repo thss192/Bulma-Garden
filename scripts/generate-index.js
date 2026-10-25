@@ -77,6 +77,27 @@ function syncFallback(posts) {
   fs.writeFileSync(fallbackPath, next, "utf8");
 }
 
+// 同步 config.json 到 js/fallback-data.js 的 __CONFIG__
+function syncConfigToFallback() {
+  const cfgPath = path.join(__dirname, "..", "config.json");
+  const fbPath = path.join(__dirname, "..", "js", "fallback-data.js");
+  let cfgRaw = fs.readFileSync(cfgPath, "utf8").replace(/^\uFEFF/, "");
+  if (cfgRaw.includes("\uFFFD")) {
+    console.error("[err] config.json 有 U+FFFD 替换字符，拒绝同步");
+    process.exit(1);
+  }
+  const cfg = JSON.parse(cfgRaw);
+  let fb = fs.readFileSync(fbPath, "utf8");
+  const marker = "window.__CONFIG__ =";
+  const start = fb.indexOf(marker);
+  if (start === -1) { console.warn("[warn] fallback-data.js 未找到 __CONFIG__"); return; }
+  const end = fb.indexOf("};\n", start);
+  if (end === -1) { console.warn("[warn] __CONFIG__ 段未正常结束"); return; }
+  const next = fb.slice(0, start) + marker + " " + JSON.stringify(cfg, null, 2) + ";" + fb.slice(end + 3);
+  fs.writeFileSync(fbPath, next, "utf8");
+  console.log("[ok] config.json 已同步到 fallback-data.js 的 __CONFIG__");
+}
+
 const DRY_RUN = process.argv.includes("--dry-run");
 if (DRY_RUN) {
   console.log("[dry-run] 解析结果（不会写入任何文件）：");
@@ -84,6 +105,7 @@ if (DRY_RUN) {
   process.exit(0);
 }
 syncFallback(posts);
+syncConfigToFallback();
 
 console.log(`✅ 解析完成，包含 order 字段，共 ${posts.length} 篇文章。`);
 
