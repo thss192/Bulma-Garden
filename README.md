@@ -1,157 +1,153 @@
+<div align="center">
+
 # 🌱 Bulma-Garden
 
-![Bulma](https://img.shields.io/badge/Bulma-1.0.2-00d1b2?style=flat-square&logo=bulma)
-![Vanilla JS](https://img.shields.io/badge/Vanilla_JS-ES6+-f7df1e?style=flat-square&logo=javascript)
-![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)
-![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)
+**一个真正“零门槛、零依赖”的极简纯静态博客系统**
 
-这是一个基于 **Bulma CSS** 和 **原生 JavaScript** 构建的纯静态个人博客系统。无需任何打包构建工具（Webpack/Vite/Nuxt），不需要数据库，完美适配 GitHub Pages 等静态托管服务。
+[![Bulma](https://img.shields.io/badge/Bulma-1.0.2-00d1b2?style=flat-square&logo=bulma)](https://bulma.io)
+[![Vanilla JS](https://img.shields.io/badge/Vanilla_JS-ES6+-f7df1e?style=flat-square&logo=javascript)](#)
+[![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE.txt)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/thss192/Bulma-Garden/pulls)
 
-## ✨ 特性 (Features)
+🚀 **[在线预览 (Live Demo)](https://thss192.github.io/Bulma-Garden/)** 
 
-* **极简架构**：HTML + CSS + 原生 JS，零依赖，拒绝臃肿。
-* **数据与视图彻底分离**：全站所有文案、标题、项目、友链均由 `config.json` 或独立 JSON 文件驱动，HTML 仅作骨架。
-* **丝滑的热更新体验**：自研 `dev.js` 本地服务器，修改任意 HTML/CSS/JS/MD 文件，浏览器自动瞬间刷新，无需手动 F5。
-* **双通道数据源**：内置 `fallback-data.js` 兜底机制，完美兼顾“本地双击预览”与“服务器真实渲染”两种场景。
-* **系列教程管理**：支持按 `series` 分组，内置手风琴折叠与系列独立分页。
-* **灵活排序**：支持基于时间（正序/倒序）或自定义 ID（`order`）排序。
-* **深色模式**：完美适配系统偏好，支持手动一键切换并记忆至 `localStorage`。
-* **全文搜索**：基于 JSON 索引的本地全文搜索，支持 `Ctrl+K` 快速唤起。
-* **沉浸式阅读**：自动生成目录（TOC）、阅读进度条、阅读时长估算、图片点击放大（Lightbox）、代码一键复制。
+*无需安装 Node.js，无需学习复杂的构建工具。只需改改 JSON 和 Markdown，就能拥有一个极简、优雅的个人数字花园。*
 
-## 📂 目录结构
+</div>
+
+---
+
+## ✨ 为什么选择 Bulma-Garden？
+
+市面上有很多博客框架，但大部分需要你配置繁琐的 Node.js 环境、敲一堆看不懂的命令，或者学习新的框架语法。
+**Bulma-Garden 的哲学是：“把简单还给写作”。**
+
+你不需要懂前端工程化，只要你会打字、懂一点点 Markdown，你就能拥有一个极具现代感、丝滑流畅的个人主页。
+
+### 💡 极致的简单方便 (Why it's easy)
+
+- **改 JSON 就能变样**：全站的标题、作者信息、功能开关、导航菜单，全部写在 `config.json` 里。想换个网站名字？改一行字就行。
+- **写 MD 就是发文**：文章全都在 `posts/` 文件夹下，用纯文本写 Markdown，保存即完成。
+- **一键自动跟随**：Windows 用户只需双击 `start.bat`，脚本会自动打开 VSCode、启动本地服务器，并**实时监听你的所有改动**（甚至不用手动刷新浏览器，网页会自己变）。
+- **零依赖，不折腾**：不用 `npm install`，没有 `node_modules`，没有任何第三方打包工具。扔到 GitHub Pages 就能直接上线。
+
+### 🎨 惊艳的视觉体验 (Features)
+
+- **动态视觉特效**：自带丝滑的 Canvas 粒子引擎（星空、爱心、花朵飘落），点击屏幕还有爆炸反馈，且性能极佳（稳定 60 帧）。
+- **多主题与调色盘**：内置 6 套精选配色，完美支持亮暗模式一键切换。
+- **生动的首页体验**：首页标题支持打字机逐字渲染（完美兼容 Emoji），侧边栏还有时间感知的问候语。
+- **沉浸式阅读**：自动生成目录（TOC）、阅读进度条、代码高亮一键复制、图片点击放大。
+- **极速全文搜索**：支持 `Ctrl+K` 唤醒本地全文搜索，找文章不用等。
+
+---
+
+## 📸 界面截图
+
+<table align="center" style="border-collapse: collapse; border: none;">
+  <tr>
+    <td align="center" width="50%">
+      <img src="images/screenshot-1.png" alt="首页亮色模式" width="100%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+      <br><sub>✨ 首页亮色模式</sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="images/screenshot-2.png" alt="文章暗色模式" width="100%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+      <br><sub>🌙 文章暗色模式</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="images/screenshot-3.png" alt="自定义主题" width="100%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+      <br><sub>🎨 自定义主题与特效</sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="images/screenshot-4.png" alt="文章页面" width="100%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+      <br><sub>📝 沉浸式文章阅读</sub>
+    </td>
+  </tr>
+</table>
+
+## 🚀 快速开始 (Fork & Deploy)
+
+想要拥有同款博客？只需要简单的三步：
+
+### 第一步：克隆或 Fork 本仓库
+将本项目下载到本地，或者直接 Fork 到你的 GitHub 账号下。
+
+### 第二步：修改你的个人信息
+打开 `config.json`，把你自己的信息替换进去：
+~~~json
+{
+  "siteTitle": "你的博客名字",
+  "author": {
+    "name": "你的名字",
+    "bio": "你的简介",
+    "avatar": "images/avatar.png"
+  },
+  "features": {
+    "effects": true,
+    "search": true,
+    "backToTop": true
+  }
+}
+~~~
+
+### 第三步：开始写作 & 部署
+1. 在 `posts/` 目录下新建 `.md` 文件，写文章。
+2. 运行 `node scripts/generate-index.js`（或使用本地开发流）更新文章索引。
+3. 推送到 GitHub，在仓库设置中开启 **GitHub Pages**，即可发布！
+
+---
+
+## 🛠️ 本地开发指南（极简流）
+
+如果你想在本地预览和调试，我们为你准备了“保姆级”流程：
+
+1. **一键启动**：双击项目根目录下的 `start.bat`。
+2. **自动工作区**：脚本会在后台静默启动数据监听器（`dev.js`），并自动打开 VSCode。
+3. **极速刷新**：你在 VSCode 里修改任何文件（写文章、改配置、调 CSS），只要一按保存，浏览器页面会自动刷新，完全不需要手动切窗口按 F5。
+
+*(注：macOS/Linux 用户，在终端运行 `node dev.js` 即可享受同等体验。)*
+
+---
+
+## 📂 目录结构说明
 
 ~~~text
-my-blog/
-├── index.html                 # 首页（文章列表、侧边栏）
+Bulma-Garden/
+├── index.html                 # 首页
 ├── post.html                  # 文章详情页
-├── about.html                 # 关于页
-├── projects.html              # 项目页
-├── links.html                 # 友链页
-├── 404.html                   # 404 错误页
-├── config.json                # 站点全局配置（标题、作者、导航、全站文案等）
-├── projects.json              # 项目数据（含图标配置）
-├── links.json                 # 友链数据
-├── rss.xml                    # 自动生成的 RSS 订阅
-├── custom.css                 # 唯一自定义 CSS（主题色、深色模式微调）
-├── dev.js                     # 本地开发服务器（带文件监听、自动同步与热刷新）
-├── start.bat                  # Windows 一键启动开发环境脚本
+├── config.json                # 站点全局配置（作者信息、功能开关、配色等）
+├── custom.css                 # 核心自定义样式
+├── custom-themes.css          # 调色盘面板与多主题变量、特效面板样式
 ├── js/
-│   ├── fallback-data.js       # 本地双击预览时的兜底数据（由脚本生成）
-│   ├── common.js              # 公共逻辑（导航、主题、搜索、回顶部、404文案）
-│   ├── home.js                # 首页逻辑（Hero、侧边栏、文章列表）
-│   ├── post.js                # 详情页逻辑（Markdown解析、TOC、许可协议）
-│   ├── about.js               # 关于页逻辑
-│   ├── projects.js            # 项目页逻辑
-│   └── links.js               # 友链页逻辑
-├── posts/
-│   ├── index.json             # 文章索引清单（脚本自动生成）
-│   ├── search-index.json      # 全文搜索索引（脚本自动生成）
-│   └── *.md                   # Markdown 文章
-└── scripts/
-    ├── generate-index.js      # 扫描 md，生成清单、搜索索引，并同步至 fallback-data.js
-    └── generate-rss.js        # 生成 RSS 订阅文件
+│   ├── common.js              # 公共逻辑（导航、搜索、主题状态应用）
+│   ├── theme.js               # 调色盘与特效面板交互
+│   ├── effects.js             # 高性能 Canvas 粒子引擎
+│   ├── home.js                # 首页逻辑（打字机、动态问候、列表渲染）
+│   ├── post.js                # 详情页逻辑（Markdown、CodeBlock、TOC）
+│   └── ...
+├── posts/                     # 存放 Markdown 文章和自动生成的 JSON 索引
+└── scripts/                   # Node.js 构建脚本（生成索引、生成 RSS）
 ~~~
 
-## 🚀 快速开始与开发指南
-
-### 推荐开发方式：一键启动全自动环境（Windows）
-
-在项目根目录下双击 `start.bat`，即可实现完全自动化的开发体验：
-1. 自动用 **VSCode** 打开当前项目。
-2. 后台静默启动本地服务器（`http://localhost:8000`）。
-3. 开启文件监听，并在浏览器注入 WebSocket。
-4. 无论你是修改文章、改样式还是改 HTML，保存的瞬间，浏览器就会**自动刷新**。
-
-*(提示：如果不想用自带的 8000 端口服务器，也可以在 VSCode 里用 Live Server 插件打开，只要后台在跑 `node dev.js`，数据依然会自动同步。)*
-
-### 方式二：直接双击本地文件（极简预览）
-
-直接双击打开 `index.html`。
-
-*(注：由于浏览器 `file://` 安全限制，页面会自动加载 `fallback-data.js` 中的兜底数据，文章列表均能正常展示，但**文章详情页无法读取本地 .md 文件**。)*
-
-## 📝 写作与数据更新指南
-
-### 1. 新增一篇文章
-
-1. 在 `posts/` 目录下新建 Markdown 文件，文件名即 URL 的 slug（如 `css-flexbox.md`）。
-2. 文件头部必须包含规范的 Front-matter：
-
-~~~markdown
 ---
-title: 深入理解 Flexbox 布局
-date: 2025-11-01
-order: 8 # 可选：用于自定义排序
-tags: [前端, CSS, 布局]
-series: CSS 进阶之路 # 可选：系列名称
-summary: 一句话摘要，用于列表页展示。
+
+## 🤝 参与贡献
+
+如果你想为这个项目添加新的特效、重构代码或完善文档，非常欢迎提交 Pull Request！
+1. Fork 本仓库
+2. 创建你的分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 开启一个 Pull Request
+
 ---
-# 正文标题
 
-这里是正文内容...
-~~~
+## 📄 开源协议
 
-3. 如果你使用的是 `start.bat` 启动的环境，只要按下保存，索引和兜底数据都会**自动更新**，网页也会自动刷新。
+- **代码**：基于 [MIT License](LICENSE.txt) 开源，你可以自由用于个人或商业项目。
+- **博客文章内容**：基于 [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) 许可。
 
-### 2. 修改站点配置 (config.json)
-
-打开 `config.json`，你可以修改以下内容：
-
-* `siteTitle` / `siteSubtitle` / `siteUrl`：站点基本信息
-* `author`：作者信息（姓名、头像、简介、邮箱、起始年份、技能标签、关于页长文）
-* `hero`：首页首屏的标题与副标题
-* `pageCopy`：各页面的文案（如项目页标题、友链页标题与提示语、404页面文案等）
-* `postLicense`：文章底部的版权许可协议文案
-* `nav` / `social`：导航菜单与社交链接
-* `theme`：主题色 HSL 值
-* `defaultSort`：全局默认排序方式（`"asc"` / `"desc"` / `"order"`）
-
-### 3. 修改项目 / 友链
-
-* **项目**：编辑 `projects.json`，在数组中添加对象。支持 `icon` 字段（FontAwesome 类名，如 `fa-rocket`，不填则默认 `fa-cube`）。
-* **友链**：编辑 `links.json`，在数组中添加对象。
-
-## 🛠️ 脚本用法补充
-
-如果你没有使用一键启动，或者只想手动更新数据：
-
-~~~bash
-# 生成清单（会写入 index.json、search-index.json、fallback-data.js）
-node scripts/generate-index.js
-
-# 只解析不写入，用于验证解析结果对不对（不会改动任何文件）
-node scripts/generate-index.js --dry-run
-
-# 生成 RSS 订阅文件（需在 config.json 中配置正确的 siteUrl）
-node scripts/generate-rss.js
-~~~
-
-## 🌐 部署到 GitHub Pages
-
-1. 在 GitHub 上创建一个新仓库（如果是个人主页，命名为 `你的用户名.github.io`）。
-2. 将本项目代码推送到 `main` 分支。
-3. 如果使用 `你的用户名.github.io` 作为仓库名，GitHub 会自动发布你的博客。否则需进入 **Settings** -> **Pages** 手动选择分支进行部署。
-
-## 🐛 已知问题与路线图
-
-### 已修复
-- [x] `post.js` 缺失 `loadPostIndex` 导致上下篇静默不显示
-- [x] `generate-index.js` 不同步 `fallback-data.js`
-- [x] `config.json` 的 `defaultSort` 对首页排序不生效
-- [x] `404.html` 未引 `fallback-data.js` 导致导航栏为空
-- [x] `generate-rss.js` 的 `SITE_URL` 硬编码
-- [x] `config.json` 带 BOM 导致 `JSON.parse` 失败
-- [x] 完成数据与 HTML 彻底分离，所有文案由 config 驱动
-- [x] 修复本地双击白屏问题，完善 fetch 异常降级
-- [x] 新增 `dev.js` 全目录监听与 WebSocket 热更新功能
-
-### 待处理
-- [ ] `search-index.json` 在 `file://` 下无法加载，搜索只能依赖示例兜底数据
-- [ ] 详情页在 `file://` 下无法读取 `.md`，需起本地服务器
-- [ ] 缺少单元测试（front-matter 解析、清单生成）
-- [ ] 渲染 Markdown 时未做 XSS 防护（`marked.parse` 结果直接 `innerHTML`）
-
-## 📄 许可协议
-
-本项目基于 [MIT License](https://opensource.org/licenses/MIT) 开源。博客文章内容基于 [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) 许可。
+<div align="center">
+  <i>用最纯粹的技术，建最优雅的花园。</i>
+</div>
