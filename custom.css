@@ -6,15 +6,15 @@
    1. 全局变量与基础 (Variables & Base)
    -------------------------------------------------------------------------- */
 :root {
-  /* 覆盖 Bulma 主色与链接色 (默认值，会被 config.json 覆盖) */
+  /* 保留原变量 */
   --bulma-primary-h: 171;
   --bulma-primary-s: 100%;
   --bulma-primary-l: 41%;
   --bulma-link-h: 233;
   --bulma-link-s: 100%;
   --bulma-link-l: 63%;
-  
-  /* 自定义全局变量 */
+
+  /* 兜底背景 */
   --bg-body: var(--bulma-scheme-main-bis);
   --bg-dark: #121212;
   --bg-dark-card: #1a1a1a;
@@ -23,15 +23,24 @@
   --border-dark: #2a2a2a;
 }
 
+/* 亮色模式：每套主题给背景极淡色调 */
+:root[data-palette="default"] { --bg-body: #f4f7f7; }
+:root[data-palette="forest"]  { --bg-body: #f3f7f4; }
+:root[data-palette="sakura"]  { --bg-body: #faf4f6; }
+:root[data-palette="ocean"]   { --bg-body: #f2f6fa; }
+:root[data-palette="sunset"]  { --bg-body: #faf6f2; }
+:root[data-palette="mono"]    { --bg-body: #f5f5f5; }
+
+/* 深色模式：必须放在 palette 之后，且用同等或更高优先级覆盖 */
+:root[data-theme="dark"] {
+  --bg-body: var(--bg-dark);
+}
+
 body {
   background-color: var(--bg-body);
   transition: background-color .25s ease, color .25s ease;
 }
 
-/* 深色模式下的全局微调 */
-[data-theme="dark"] {
-  --bg-body: var(--bg-dark);
-}
 [data-theme="dark"] body {
   background-color: var(--bg-dark);
 }
@@ -252,13 +261,24 @@ body {
   display: block;
   padding: 0.4rem 0.75rem;
   font-size: 0.85rem;
-  color: var(--bulma-text-light);
+  color: var(--bulma-text);
   border-left: 2px solid transparent;
   margin-left: -2px;
   transition: all 0.15s ease;
 }
 
-#toc-list a:hover { color: var(--bulma-text-strong); }
+#toc-list a:hover {
+  color: var(--bulma-text-strong);
+}
+
+[data-theme="dark"] #toc-list a {
+  color: var(--bulma-text-light);   /* 深色下维持浅灰 */
+}
+
+[data-theme="dark"] #toc-list a:hover {
+  color: var(--bulma-text-strong);
+}
+
 #toc-list a.is-active {
   color: var(--bulma-primary);
   border-left-color: var(--bulma-primary);
@@ -286,16 +306,18 @@ body {
 }
 
 .code-wrapper {
-  background-color: var(--bulma-scheme-main-bis);
-  border: 1px solid var(--bulma-border-weak);
+  background-color: #f6f8fa;
+  border: 1px solid #d0d7de;
   border-radius: var(--bulma-radius-large);
   margin-bottom: 1.5rem;
   overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 [data-theme="dark"] .code-wrapper {
-  background-color: #161616;
-  border-color: var(--border-dark);
+  background-color: #0d0d0d;
+  border-color: #333;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 .code-header {
@@ -303,25 +325,33 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 0.4rem 1rem;
-  background-color: rgba(0, 0, 0, 0.03);
-  border-bottom: 1px solid var(--bulma-border-weak);
+  background-color: #eef1f4;
+  border-bottom: 1px solid #d0d7de;
 }
 
 [data-theme="dark"] .code-header {
-  background-color: var(--bg-dark-card);
-  border-bottom-color: var(--border-dark);
+  background-color: #1f1f1f;
+  border-bottom-color: #333;
 }
 
 .code-lang {
   font-size: 0.75rem;
   font-family: var(--bulma-family-code);
-  color: var(--bulma-text-light);
   font-weight: 600;
   letter-spacing: 0.5px;
+  color: hsl(
+    calc(var(--bulma-primary-h) + 180),
+    calc(var(--bulma-primary-s) * 0.8),
+    calc(var(--bulma-primary-l) * 0.8)
+  );
 }
 
 .copy-btn {
-  color: var(--bulma-text-light) !important;
+  color: hsl(
+    calc(var(--bulma-primary-h) + 180),
+    calc(var(--bulma-primary-s) * 0.8),
+    calc(var(--bulma-primary-l) * 0.85)
+  ) !important;
   transition: all 0.2s ease !important;
 }
 
@@ -330,8 +360,20 @@ body {
   background-color: transparent !important;
 }
 
+[data-theme="dark"] .code-lang {
+  color: hsl(
+    calc(var(--bulma-primary-h) + 180),
+    calc(var(--bulma-primary-s) * 0.7),
+    72%
+  );
+}
+
 [data-theme="dark"] .copy-btn {
-  color: var(--text-dark-muted) !important;
+  color: hsl(
+    calc(var(--bulma-primary-h) + 180),
+    calc(var(--bulma-primary-s) * 0.7),
+    72%
+  ) !important;
 }
 
 [data-theme="dark"] .copy-btn:hover {
@@ -360,7 +402,6 @@ body {
 .code-wrapper pre::-webkit-scrollbar-thumb:hover { background-color: rgba(150, 150, 150, 0.6); }
 [data-theme="dark"] .code-wrapper pre::-webkit-scrollbar-thumb { background-color: rgba(255, 255, 255, 0.2); }
 [data-theme="dark"] .code-wrapper pre::-webkit-scrollbar-thumb:hover { background-color: rgba(255, 255, 255, 0.4); }
-
 /* --------------------------------------------------------------------------
    5. 独立页面 (Pages)
    -------------------------------------------------------------------------- */
